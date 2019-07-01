@@ -1,6 +1,6 @@
 {
   "name": "@kakekomu/remote-data",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
@@ -15,7 +15,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
     "clean": "rm -rf ./lib",
-    "post-install": "npm run build"
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
