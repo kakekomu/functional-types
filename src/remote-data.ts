@@ -60,21 +60,6 @@ export type UnRemoteData<T> = T extends { type: "Success"; value: infer V }
 
 export type RemoteDataList<err, T> = { [K in keyof T]: RemoteData<err, T[K]> }
 
-export type UnRemoteDataList<T> = { [K in keyof T]: UnRemoteData<T[K]> }
-
-type Head<T extends any[]> = T extends [any, ...any[]] ? T[0] : never
-
-type Tail<T extends any[]> = ((...t: T) => any) extends ((
-  _: any,
-  ...tail: infer TT
-) => any)
-  ? TT
-  : []
-
-type CurriedFunction<T extends any[], R> = T extends []
-  ? R
-  : (arg: Head<T>) => CurriedFunction<Tail<T>, R>
-
 /** Map a function f over a RemoteData value.
  *  If and only if the RemoteData value is a success, this function will
  *  return a new RemoteData with its wrapped value applied to f.
@@ -96,22 +81,23 @@ export const map = <err, val, returnVal>(
   }
 }
 
-/** Map a function f over a list of RemoteData values.
+type GetErrorType<T> = T extends RemoteDataList<infer err, any[]> ? err : never
+
+type GetValueType<T> = T extends RemoteDataList<any, infer vals> ? vals : never
+
+/** Map a function f over a tuple of RemoteData values.
  *  If and only if all the RemoteData values are successes, this function will
  *  return a new RemoteData with its wrapped value applied to f.
  *  Otherwise it returns the original RemoteData value.
  *
- *  [m a] -> ([a] -> b) -> m b
+ *  t (m a) -> (t a -> b) -> m b
  */
-export const mapMany = <
-  err,
-  remoteDataArgs extends Array<RemoteData<err, any>>,
-  returnVal
->(
-  remoteDataList: remoteDataArgs,
-  functor: CurriedFunction<UnRemoteDataList<remoteDataArgs>, returnVal>
-): RemoteData<err, returnVal> =>
-  remoteDataList.reduce((prev, current) => ap(current, prev), Success(functor))
+export const mapMany = <remoteVals extends any[], returnVal>(
+  remoteArgs: remoteVals,
+  f: (...args: GetValueType<remoteVals>) => returnVal
+): RemoteData<GetErrorType<remoteVals>, returnVal> =>
+  // @ts-ignore
+  map(sequence(remoteArgs), args => f(...args))
 
 export const mapFailure = <err, val, newerr>(
   remoteData: RemoteData<err, val>,
@@ -126,6 +112,36 @@ export const mapFailure = <err, val, newerr>(
     }
   }
 }
+
+/** [m a] -> m [a] */
+export const sequence = <err, val>(
+  remoteDataList: Array<RemoteData<err, val>>
+) =>
+  remoteDataList.reduce((prev, current) => {
+    if (prev.type === "Success" && current.type === "Success") {
+      return Success([...prev.value, current.value])
+    } else if (prev.type === "Success" && current.type !== "Success") {
+      return current
+    } else {
+      return prev
+    }
+  }, Success([]))
+
+/** [a] -> (a -> m a) -> m [a] */
+export const traverse = <err, val>(
+  valueList: val[],
+  f: (value: val) => RemoteData<err, val>
+) =>
+  valueList.reduce((prev, current) => {
+    const applied = f(current)
+    if (prev.type === "Success" && applied.type === "Success") {
+      return Success([...prev.value, applied.value])
+    } else if (prev.type === "Success" && applied.type !== "Success") {
+      return current
+    } else {
+      return prev
+    }
+  }, Success([]))
 
 /** Also known as bind or flatMap.
  *  If and only if the RemoteData value is a success, this function will

@@ -1,10 +1,4 @@
-import {
-  Failure,
-  Loading,
-  NotAsked,
-  RemoteDataList,
-  Success
-} from "../remote-data"
+import { Failure, Loading, NotAsked, Success } from "../remote-data"
 import * as Remote from "../remote-data"
 
 describe("Remote.withDefault", () => {
@@ -99,46 +93,30 @@ describe("Remote.andThen", () => {
 })
 
 describe("Remote.mapMany", () => {
-  const func = (str: string) => (num: number) => (bool: boolean) =>
+  const func = (str: string, num: number, bool: boolean) =>
     `${str}${num}${bool}`
 
   test("mapping with a NotAsked value", () => {
     expect(
-      Remote.mapMany<
-        string,
-        RemoteDataList<string, [string, number, boolean]>,
-        string
-      >([Success("a"), NotAsked(), Success(true)], func)
+      Remote.mapMany([Success("a"), Failure("str"), Success(true)], func)
     ).toEqual(NotAsked())
   })
 
   test("mapping with a Loading value", () => {
     expect(
-      Remote.mapMany<
-        string,
-        RemoteDataList<string, [string, number, boolean]>,
-        string
-      >([Success("a"), Loading(), Success(true)], func)
+      Remote.mapMany([Success("a"), Loading(), Success(true)], func)
     ).toEqual(Loading())
   })
 
   test("mapping with a Failure value", () => {
     expect(
-      Remote.mapMany<
-        string,
-        RemoteDataList<string, [string, number, boolean]>,
-        string
-      >([Success("a"), Failure("error"), Success(true)], func)
+      Remote.mapMany([Success("a"), Failure("error"), Success(true)], func)
     ).toEqual(Failure("error"))
   })
 
   test("mapping only Success values", () => {
     expect(
-      Remote.mapMany<
-        string,
-        RemoteDataList<string, [string, number, boolean]>,
-        string
-      >([Success("a"), Success(1), Success(true)], func)
+      Remote.mapMany([Success("a"), Success(1), Success(true)], func)
     ).toEqual(Success("a1true"))
   })
 })
@@ -159,6 +137,32 @@ describe("Remote.ap", () => {
   test("applying a Success value", () => {
     expect(Remote.ap(Success(5), Success((num: number) => num + 5))).toEqual(
       Success(10)
+    )
+  })
+})
+
+describe("Remote.sequence", () => {
+  test("sequence over a list of Success values", () => {
+    expect(Remote.sequence([Success(5), Success(4), Success(3)])).toEqual(
+      Success([5, 4, 3])
+    )
+  })
+
+  test("sequence over a list with a Failure value", () => {
+    expect(Remote.sequence([Success(5), Failure("error"), Success(3)])).toEqual(
+      Failure("error")
+    )
+  })
+
+  test("sequence over a list with a NotAsked values", () => {
+    expect(Remote.sequence([Success(5), NotAsked(), Success(3)])).toEqual(
+      NotAsked()
+    )
+  })
+
+  test("sequence over a list with a Loading values", () => {
+    expect(Remote.sequence([Success(5), Loading(), Success(3)])).toEqual(
+      Loading()
     )
   })
 })

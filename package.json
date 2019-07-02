@@ -12,10 +12,11 @@
     "test": "jest",
     "build": "rollup -c",
     "watch": "rollup -cw",
+    "tsc": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
     "clean": "rm -rf ./lib",
-    "prepublish": "npm run build"
+    "prepare": "npm run build && npm run tsc"
   },
   "repository": {
     "type": "git",
