@@ -53,7 +53,6 @@ export const Success = <err, val>(value: val): RemoteData<err, val> => ({
 /** Type representing a remote data in a Promise. */
 export type AsyncRemoteData<err, val> = Promise<RemoteData<err, val>>
 
-// Mapping
 export type UnRemoteData<T> = T extends { type: "Success"; value: infer V }
   ? V
   : never
@@ -124,15 +123,15 @@ export const mapFailure = <err, val, newerr>(
 export const sequence = <err, val>(
   remoteDataList: Array<RemoteData<err, val>>
 ): RemoteData<err, val[]> =>
-  remoteDataList.reduce((prev, current) => {
-    if (prev.type === "Success" && current.type === "Success") {
-      return Success([...prev.value, current.value])
-    } else if (prev.type === "Success" && current.type !== "Success") {
-      return current
-    } else {
-      return prev
-    }
-  }, Success([]))
+  remoteDataList.reduce(
+    (prev, current) =>
+      prev.type === "Success" && current.type === "Success"
+        ? Success([...prev.value, current.value])
+        : prev.type === "Success" && current.type !== "Success"
+        ? current
+        : prev,
+    Success([])
+  )
 
 /** List a -> (a -> RemoteData err a) -> RemoteData err (List a) */
 export const traverse = <err, val>(
@@ -141,13 +140,11 @@ export const traverse = <err, val>(
 ) =>
   valueList.reduce((prev, current) => {
     const applied = f(current)
-    if (prev.type === "Success" && applied.type === "Success") {
-      return Success([...prev.value, applied.value])
-    } else if (prev.type === "Success" && applied.type !== "Success") {
-      return current
-    } else {
-      return prev
-    }
+    return prev.type === "Success" && applied.type === "Success"
+      ? Success([...prev.value, applied.value])
+      : prev.type === "Success" && applied.type !== "Success"
+      ? current
+      : prev
   }, Success([]))
 
 /** Also known as bind or flatMap. It is a good way to chain dependent actions.
