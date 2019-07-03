@@ -65,7 +65,7 @@ export type RemoteDataList<err, T> = { [K in keyof T]: RemoteData<err, T[K]> }
  *  return a new RemoteData with its wrapped value applied to f.
  *  Otherwise it returns the original RemoteData value.
  *
- *  m a -> (a -> b) -> m b
+ *  RemoteData err a -> (a -> b) -> RemoteData err b
  */
 export const map = <err, val, returnVal>(
   remoteData: RemoteData<err, val>,
@@ -90,7 +90,7 @@ type GetValueType<T> = T extends RemoteDataList<any, infer vals> ? vals : never
  *  return a new RemoteData with its wrapped value applied to f.
  *  Otherwise it returns the original RemoteData value.
  *
- *  t (m a) -> (t a -> b) -> m b
+ *  t (RemoteData err a) -> (t a -> b) -> RemoteData err b
  */
 export const mapMany = <remoteVals extends any[], returnVal>(
   remoteArgs: remoteVals,
@@ -99,6 +99,13 @@ export const mapMany = <remoteVals extends any[], returnVal>(
   // @ts-ignore
   map(sequence(remoteArgs), args => f(...args))
 
+/** Map a function f over a RemoteData error.
+ *  If and only if the RemoteData value is a failure, this function will
+ *  return a new RemoteData with its wrapped error applied to f.
+ *  Otherwise it returns the original RemoteData.
+ *
+ *  RemoteData err a -> (err -> errB) -> RemoteData errB a
+ */
 export const mapFailure = <err, val, newerr>(
   remoteData: RemoteData<err, val>,
   f: (error: err) => newerr
@@ -113,10 +120,10 @@ export const mapFailure = <err, val, newerr>(
   }
 }
 
-/** [m a] -> m [a] */
+/** List (RemoteData err a) -> RemoteData err (List a) */
 export const sequence = <err, val>(
   remoteDataList: Array<RemoteData<err, val>>
-) =>
+): RemoteData<err, val[]> =>
   remoteDataList.reduce((prev, current) => {
     if (prev.type === "Success" && current.type === "Success") {
       return Success([...prev.value, current.value])
@@ -127,7 +134,7 @@ export const sequence = <err, val>(
     }
   }, Success([]))
 
-/** [a] -> (a -> m a) -> m [a] */
+/** List a -> (a -> RemoteData err a) -> RemoteData err (List a) */
 export const traverse = <err, val>(
   valueList: val[],
   f: (value: val) => RemoteData<err, val>
@@ -143,12 +150,12 @@ export const traverse = <err, val>(
     }
   }, Success([]))
 
-/** Also known as bind or flatMap.
- *  If and only if the RemoteData value is a success, this function will
- *  return the wrapped value applied to f.
- *  Otherwise it returns the original RemoteData value.
+/** Also known as bind or flatMap. It is a good way to chain dependent actions.
+ *  If and only if the input value is a success, this function will
+ *  apply its wrapped value to f.
+ *  Otherwise it returns the original RemoteData.
  *
- *  m a -> (a -> m b) -> m b
+ *  RemoteData err a -> (a -> RemoteData err b) -> RemoteData err b
  */
 export const andThen = <err, val, returnVal>(
   remoteData: RemoteData<err, val>,
@@ -170,7 +177,7 @@ export const andThen = <err, val, returnVal>(
  *  return the wrapped value applied to f.
  *  Otherwise it returns the original RemoteData value.
  *
- *  m a -> m (a -> b) -> m b
+ *  RemoteData err a -> RemoteData err (a -> b) -> RemoteData err b
  */
 export const ap = <err, val, returnVal>(
   remoteData: RemoteData<err, val>,
@@ -189,6 +196,8 @@ export const ap = <err, val, returnVal>(
 /** Unwraps a RemoteData value to a primitive value with a default.
  *  If and only if the RemoteData is a value this function will return its
  *  wrapped value. Otherwise it will return the default value.
+ *
+ *  RemoteData err a -> a -> a
  */
 export const withDefault = <err, val>(
   remoteData: RemoteData<err, val>,
@@ -207,6 +216,8 @@ export const withDefault = <err, val>(
 /** Creates a RemoteData value from nullable primitive value.
  *  It will return a Failure if the input value is null or undefined.
  *  Good for use with other libraries.
+ *
+ *  a? -> err -> RemoteData err a
  */
 export const fromNullable = <err, val>(
   testedValue: val | undefined | null,
