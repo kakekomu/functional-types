@@ -98,7 +98,7 @@ describe("Remote.mapMany", () => {
 
   test("mapping with a NotAsked value", () => {
     expect(
-      Remote.mapMany([Success("a"), Failure("str"), Success(true)], func)
+      Remote.mapMany([Success("a"), NotAsked(), Success(true)], func)
     ).toEqual(NotAsked())
   })
 
