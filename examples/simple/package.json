@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@emotion/core": "^10.0.14",
-    "@kakekomu/remote-data": "^1.1.0"
+    "@kakekomu/remote-data": "file:../../"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",

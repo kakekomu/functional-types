@@ -1014,10 +1014,8 @@
   resolved "https://registry.yarnpkg.com/@iarna/toml/-/toml-2.2.3.tgz#f060bf6eaafae4d56a7dac618980838b0696e2ab"
   integrity sha512-FmuxfCuolpLl0AnQ2NHSzoUKWEJDFl63qXjzdoWBVyFCXzMGm1spBzk7LeHNoVCiWCF7mRVms9e6jEV9+MoPbg==
 
-"@kakekomu/remote-data@^1.1.0":
+"@kakekomu/remote-data@file:../../":
   version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@kakekomu/remote-data/-/remote-data-1.1.0.tgz#f20ccdb0ff4ecc275df465666d83fe3ecc89f8d0"
-  integrity sha512-pXUpxkOtHmAmKMa8mryURWh+/JQCffQfq3Wy7WkyyuRecEW2mKyQDJYbdS7Yf8V9iemIi5hCGESqi9wWJkjxaw==
   dependencies:
     axios "^0.19.0"
 
