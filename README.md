@@ -26,7 +26,7 @@ Under the hood, these four types are simple objects with a `type` field. You wil
 
 # Example use case
 
-This simple example show the main usage of this package.
+This simple example shows the main usage of this package.
 
 ```javascript
 import React, { useState } from "react"
@@ -134,7 +134,7 @@ Unwraps a RemoteData value to a primitive value with a default.
 If and only if the RemoteData is a value this function will return its
 wrapped value. Otherwise it will return the default value.
 
-*RemoteData err a -> a -> a
+*RemoteData err a -> a -> a*
 
 #### Remote.fromNullable
 
