@@ -1,4 +1,8 @@
 # RemoteData
+
+[![CircleCI](https://circleci.com/gh/kakekomu/remote-data.svg?style=svg)](https://circleci.com/gh/kakekomu/remote-data)
+[![Types](https://img.shields.io/npm/types/@kakekomu/remote-data.svg)](https://npm.im/@kakekomu/remote-data)
+
 RemoteData type for handling data from remote resources.
 The idea is based on the [remotedata](https://package.elm-lang.org/packages/krisajenkins/remotedata/latest/) Elm package
 by Kris Jenkins.
