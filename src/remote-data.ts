@@ -69,16 +69,8 @@ export type RemoteDataList<err, T> = { [K in keyof T]: RemoteData<err, T[K]> }
 export const map = <err, val, returnVal>(
   remoteData: RemoteData<err, val>,
   f: (value: val) => returnVal
-): RemoteData<err, returnVal> => {
-  switch (remoteData.type) {
-    case "Success": {
-      return Success(f(remoteData.value))
-    }
-    default: {
-      return remoteData
-    }
-  }
-}
+): RemoteData<err, returnVal> =>
+  remoteData.type === "Success" ? Success(f(remoteData.value)) : remoteData
 
 type GetErrorType<T> = T extends RemoteDataList<infer err, any[]> ? err : never
 
@@ -108,16 +100,8 @@ export const mapMany = <remoteVals extends any[], returnVal>(
 export const mapFailure = <err, val, newerr>(
   remoteData: RemoteData<err, val>,
   f: (error: err) => newerr
-): RemoteData<newerr, val> => {
-  switch (remoteData.type) {
-    case "Failure": {
-      return Failure(f(remoteData.error))
-    }
-    default: {
-      return remoteData
-    }
-  }
-}
+): RemoteData<newerr, val> =>
+  remoteData.type === "Failure" ? Failure(f(remoteData.error)) : remoteData
 
 /** List (RemoteData err a) -> RemoteData err (List a) */
 export const sequence = <err, val>(
@@ -157,16 +141,8 @@ export const traverse = <err, val>(
 export const andThen = <err, val, returnVal>(
   remoteData: RemoteData<err, val>,
   f: (value: val) => RemoteData<err, returnVal>
-): RemoteData<err, returnVal> => {
-  switch (remoteData.type) {
-    case "Success": {
-      return f(remoteData.value)
-    }
-    default: {
-      return remoteData
-    }
-  }
-}
+): RemoteData<err, returnVal> =>
+  remoteData.type === "Success" ? f(remoteData.value) : remoteData
 
 /** Also known as apply. Same as map, but the function that operates on the
  *  value is also wrapped in a RemoteData.
@@ -179,16 +155,10 @@ export const andThen = <err, val, returnVal>(
 export const ap = <err, val, returnVal>(
   remoteData: RemoteData<err, val>,
   applicativeF: RemoteData<err, (value: val) => returnVal>
-): RemoteData<err, returnVal> => {
-  switch (applicativeF.type) {
-    case "Success": {
-      return map(remoteData, applicativeF.value)
-    }
-    default: {
-      return applicativeF
-    }
-  }
-}
+): RemoteData<err, returnVal> =>
+  applicativeF.type === "Success"
+    ? map(remoteData, applicativeF.value)
+    : applicativeF
 
 /** Unwraps a RemoteData value to a primitive value with a default.
  *  If and only if the RemoteData is a value this function will return its
@@ -199,16 +169,7 @@ export const ap = <err, val, returnVal>(
 export const withDefault = <err, val>(
   remoteData: RemoteData<err, val>,
   defaultValue: val
-): val => {
-  switch (remoteData.type) {
-    case "Success": {
-      return remoteData.value
-    }
-    default: {
-      return defaultValue
-    }
-  }
-}
+): val => (remoteData.type === "Success" ? remoteData.value : defaultValue)
 
 /** Creates a RemoteData value from nullable primitive value.
  *  It will return a Failure if the input value is null or undefined.
