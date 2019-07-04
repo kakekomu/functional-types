@@ -73,6 +73,28 @@ describe("Remote.mapFailure", () => {
   })
 })
 
+describe("Remote.mapBoth", () => {
+  const fErr = (val: string) => val + "!"
+  const fVal = (val: number) => val + 10
+
+  test("mapping a NotAsked value", () => {
+    expect(Remote.mapBoth(NotAsked(), fErr, fVal)).toEqual(NotAsked())
+  })
+
+  test("mapping a Loading value", () => {
+    expect(Remote.mapBoth(Loading(), fErr, fVal)).toEqual(Loading())
+  })
+
+  test("mapping a Failure value", () => {
+    expect(Remote.mapBoth(Failure("error"), fErr, fVal)).toEqual(
+      Failure("error!")
+    )
+  })
+
+  test("mapping a Success value", () => {
+    expect(Remote.mapBoth(Success(10), fErr, fVal)).toEqual(Success(20))
+  })
+})
 describe("Remote.andThen", () => {
   const func = (val: string) => Success(val + "!")
   test("mapping a NotAsked value", () => {

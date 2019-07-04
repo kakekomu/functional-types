@@ -103,6 +103,22 @@ export const mapFailure = <err, val, newerr>(
 ): RemoteData<newerr, val> =>
   remoteData.type === "Failure" ? Failure(f(remoteData.error)) : remoteData
 
+/** Map two functions fErr and fVal for Failure and Success cases respectively.
+ *  Same as Remote.mapFailure(Remote.map(remoteData, fVal), fErr)
+ *
+ *  RemoteData err val -> (err -> errB) -> (val -> valB) -> RemoteData errB valB
+ */
+export const mapBoth = <err, val, newerr, newval>(
+  remoteData: RemoteData<err, val>,
+  fErr: (error: err) => newerr,
+  fVal: (value: val) => newval
+): RemoteData<newerr, newval> =>
+  remoteData.type === "Failure"
+    ? Failure(fErr(remoteData.error))
+    : remoteData.type === "Success"
+    ? Success(fVal(remoteData.value))
+    : remoteData
+
 /** List (RemoteData err a) -> RemoteData err (List a) */
 export const sequence = <err, val>(
   remoteDataList: Array<RemoteData<err, val>>
