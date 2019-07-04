@@ -36,7 +36,7 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - persist_to_workspace:
-        root: ~/project
+          root: ~/project
 
   test:
     <<: *defaults
