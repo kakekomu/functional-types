@@ -17,6 +17,7 @@ jobs:
   build:
     <<: *defaults
     steps:
+      - *attach_workspace
       - checkout
 
       # Download and cache dependencies
@@ -38,12 +39,14 @@ jobs:
   test:
     <<: *defaults
     steps:
+      - *attach_workspace
       - run: yarn test
 
   publish:
     <<: *defaults
 
     steps:
+      - *attach_workspace
       - checkout
 
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/project/.npmrc
