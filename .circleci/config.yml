@@ -10,15 +10,15 @@ defaults: &defaults
   working_directory: ~/project
 
 attach_workspace: &attach_workspace
-    attach_workspace:
-              at: ~/project
+  attach_workspace:
+    at: ~/project
 
 jobs:
   build:
     <<: *defaults
     steps:
-      - *attach_workspace
       - checkout
+      - *attach_workspace
 
       # Download and cache dependencies
       - restore_cache:
@@ -35,6 +35,8 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+      - persist_to_workspace:
+        root: ~/project
 
   test:
     <<: *defaults
