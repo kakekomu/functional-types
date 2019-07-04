@@ -7,7 +7,7 @@ version: 2
 defaults: &defaults
   docker:
     - image: circleci/node:10.16
-  working_directory: ~/project
+  working_directory: ~/project/remote-data
 
 attach_workspace: &attach_workspace
   attach_workspace:
@@ -38,8 +38,7 @@ jobs:
       - persist_to_workspace:
           root: ~/project
           paths:
-            - lib
-            - src
+            - remote-data
 
   test:
     <<: *defaults
