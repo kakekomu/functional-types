@@ -54,7 +54,7 @@ jobs:
       - checkout
 
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/project/.npmrc
-      - run: yarn publish --non-interactive --new-version $CIRCLE_TAG
+      - run: yarn publish --non-interactive
 
 workflows:
   version: 2
