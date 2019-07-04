@@ -10,13 +10,13 @@
   ],
   "scripts": {
     "test": "jest",
-    "build": "rollup -c",
+    "build": "rollup -c && npm run tsc",
     "watch": "rollup -cw",
     "tsc": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
     "clean": "rm -rf ./lib",
-    "prepare": "npm run build && npm run tsc"
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
