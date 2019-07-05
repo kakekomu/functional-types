@@ -88,10 +88,21 @@ interface IResp {
     }
 }
 
+const [webData, setWebData] = useState(NotAsked<AxiosError<any>, IResp>())
+
 Remote.get<IResp>(`http://httpbin.org/get?greeting=HelloWorld`)
 ```
 
 This will give you a `AsyncRemoteData<string, IResp>` which is the same as `Promise<RemoteData<string, IResp>>`
+
+# Examples
+
+You can find some simple example applications in the [examples](https://github.com/kakekomu/remote-data/tree/master/examples) folder.
+
+### Starting the examples
+ - Install dependencies with `npm install` or `yarn`
+ - Build the remote-data library with `npm run build` or `yarn build` 
+ - Start the bundler with `npm run start:examples` or `yarn start:examples`
 
 # Helper functions
 
