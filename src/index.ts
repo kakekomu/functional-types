@@ -8,6 +8,10 @@ import {
   Success
 } from "./remote-data"
 import * as remoteData from "./remote-data"
+
+import { AsyncResult, Err, Ok, Result, ResultList } from "./result"
+import * as result from "./result"
+
 import * as restClient from "./rest-client"
 
 export {
@@ -17,9 +21,13 @@ export {
   Success,
   NotAsked,
   Loading,
-  Failure
-}
-export default {
-  ...remoteData,
-  ...restClient
+  Failure,
+  AsyncResult,
+  Err,
+  Ok,
+  Result,
+  ResultList,
+  remoteData,
+  result,
+  restClient
 }
