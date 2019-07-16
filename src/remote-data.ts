@@ -1,3 +1,4 @@
+import * as Result from "./result"
 // RemoteData type constructors
 
 export type RemoteData<err, val> =
@@ -214,3 +215,17 @@ export const isSuccess = <err, val>(remoteData: RemoteData<err, val>) =>
 /** Helper function to determine if a RemoteData is a failure */
 export const isFailure = <err, val>(remoteData: RemoteData<err, val>) =>
   remoteData.type === "Failure"
+
+/** Converts a RemoteData type to a Result type with a default error value
+ *
+ *  RemoteData err a -> err -> Result err a
+ */
+export const toResult = <err, val>(
+  remoteData: RemoteData<err, val>,
+  defaultError: err
+): Result.Result<err, val> =>
+  remoteData.type === "Success"
+    ? Result.Ok(remoteData.value)
+    : remoteData.type === "Failure"
+    ? Result.Err(remoteData.error)
+    : Result.Err(defaultError)
