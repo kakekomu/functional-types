@@ -12,7 +12,7 @@
     "test": "jest",
     "build": "rollup -c && npm run tsc",
     "watch": "rollup -cw",
-    "tsc": "tsc",
+    "tsc": "tsc --module commonjs",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
     "clean": "rm -rf ./lib",
