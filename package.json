@@ -1,6 +1,6 @@
 {
   "name": "functional-types",
-  "version": "1.2.0-beta",
+  "version": "1.2.0-alpha",
   "private": true,
   "useWorkspaces": true,
   "workspaces": [
@@ -14,7 +14,8 @@
   "scripts": {
     "build": "lerna run build --parallel",
     "test": "jest",
-    "start:examples": ""
+    "start:examples": "",
+    "newversion": "lerna version"
   },
   "keywords": [],
   "author": "Kakekomu",
