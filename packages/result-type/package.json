@@ -1,6 +1,6 @@
 {
   "name": "@kakekomu/result-type",
-  "version": "1.2.0-alpha.0",
+  "version": "1.2.0-alpha",
   "description": "",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
@@ -15,8 +15,7 @@
     "tsc": "tsc --module commonjs",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
-    "clean": "rm -rf ./lib",
-    "start:examples": "webpack-dev-server"
+    "clean": "rm -rf ./lib"
   },
   "repository": {
     "type": "git",
