@@ -15,7 +15,7 @@
     "build": "lerna run build --parallel",
     "test": "jest",
     "start:examples": "",
-    "newversion": "lerna version"
+    "release": "lerna version"
   },
   "keywords": [],
   "author": "Kakekomu",
