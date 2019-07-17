@@ -54,7 +54,7 @@ jobs:
       - checkout
 
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/project/.npmrc
-      - run: yarn publish --non-interactive
+      - run: yarn release-ci --yes
 
 workflows:
   version: 2
