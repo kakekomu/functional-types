@@ -13,8 +13,11 @@
   },
   "scripts": {
     "build": "lerna run build --parallel",
+    "clean": "lerna run clean --parallel",
     "test": "jest",
-    "start:examples": "yarn workspace examples start"
+    "start:examples": "yarn workspace examples start",
+    "release": "lerna version",
+    "release-ci": "lerna publish from-git"
   },
   "keywords": [],
   "author": "Kakekomu",

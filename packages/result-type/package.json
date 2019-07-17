@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "test": "jest",
-    "build": "rollup -c && yarn run tsc",
+    "build": "rollup -c",
     "watch": "rollup -cw",
     "tsc": "tsc --module commonjs",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
