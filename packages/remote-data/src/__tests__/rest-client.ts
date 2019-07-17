@@ -1,6 +1,6 @@
 import * as http from "http"
 import { isFailure, isSuccess } from "../remote-data"
-import * as Remote from "../rest-client"
+import * as remote from "../rest-client"
 
 let server: http.Server
 
@@ -27,30 +27,30 @@ describe("restClient methods", () => {
 
   afterAll(() => server.close())
   test("making a GET request", async () => {
-    const response = await Remote.get("http://localhost:4444/get")
+    const response = await remote.get("http://localhost:4444/get")
     expect(isSuccess(response)).toBeTruthy()
   })
 
   test("making a POST request", async () => {
-    const response = await Remote.post("http://localhost:4444/post")
+    const response = await remote.post("http://localhost:4444/post")
     expect(isSuccess(response)).toBeTruthy()
   })
 
   test("making a DELETE request", async () => {
-    const response = await Remote.del("http://localhost:4444/delete")
+    const response = await remote.del("http://localhost:4444/delete")
     expect(isSuccess(response)).toBeTruthy()
   })
   test("making a PATCH request", async () => {
-    const response = await Remote.patch("http://localhost:4444/patch")
+    const response = await remote.patch("http://localhost:4444/patch")
     expect(isSuccess(response)).toBeTruthy()
   })
   test("making a PUT request", async () => {
-    const response = await Remote.put("http://localhost:4444/put")
+    const response = await remote.put("http://localhost:4444/put")
     expect(isSuccess(response)).toBeTruthy()
   })
 
   test("handling failure", async () => {
-    const response = await Remote.get("http://localhost:4444/post")
+    const response = await remote.get("http://localhost:4444/post")
     expect(isFailure(response)).toBeTruthy()
   })
 })

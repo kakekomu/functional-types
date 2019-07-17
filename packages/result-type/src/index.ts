@@ -83,7 +83,7 @@ export const mapErr = <err, val, newerr>(
   remoteData.type === "Err" ? Err(f(remoteData.error)) : remoteData
 
 /** Map two functions fErr and fVal for Err and Ok cases respectively.
- *  Same as Remote.mapErr(Remote.map(remoteData, fVal), fErr)
+ *  Same as remote.mapErr(remote.map(remoteData, fVal), fErr)
  *
  *  Result err val -> (err -> errB) -> (val -> valB) -> Result errB valB
  */
