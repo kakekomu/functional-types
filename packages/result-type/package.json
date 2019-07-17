@@ -1,0 +1,32 @@
+{
+  "name": "@kakekomu/result-type",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "module": "lib/index.es.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "jest",
+    "build": "rollup -c && yarn run tsc",
+    "watch": "rollup -cw",
+    "tsc": "tsc --module commonjs",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
+    "clean": "rm -rf ./lib",
+    "start:examples": "webpack-dev-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kakekomu/remote-data.git"
+  },
+  "keywords": [],
+  "author": "Kakekomu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kakekomu/remote-data/issues"
+  },
+  "homepage": "https://github.com/kakekomu/remote-data#readme"
+}

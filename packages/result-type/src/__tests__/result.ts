@@ -1,5 +1,5 @@
-import { Err, Ok } from "../result"
-import * as Result from "../result"
+import { Err, Ok } from ".."
+import * as Result from ".."
 
 describe("Result.withDefault", () => {
   test("Err value with default", () => {
@@ -18,6 +18,10 @@ describe("Result.fromNullable", () => {
 
   test("convert an null value to Result", () => {
     expect(Result.fromNullable(null, "error")).toEqual(Err("error"))
+  })
+
+  test("convert a NaN value to Result", () => {
+    expect(Result.fromNullable(NaN, "error")).toEqual(Err("error"))
   })
 
   test("convert a non null value to Result", () => {

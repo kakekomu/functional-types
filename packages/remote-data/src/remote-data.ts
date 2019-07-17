@@ -1,4 +1,4 @@
-import * as Result from "./result"
+import * as Result from "@kakekomu/result-type"
 // RemoteData type constructors
 
 export type RemoteData<err, val> =
@@ -198,7 +198,11 @@ export const fromNullable = <err, val>(
   testedValue: val | undefined | null,
   errorMessage: err
 ): RemoteData<err, val> =>
-  testedValue ? Success(testedValue) : Failure(errorMessage)
+  testedValue !== null &&
+  testedValue !== undefined &&
+  (typeof testedValue !== "number" || !isNaN(testedValue))
+    ? Success(testedValue)
+    : Failure(errorMessage)
 
 /** Helper function to determine if a RemoteData is a success */
 export const isNotAsked = <err, val>(remoteData: RemoteData<err, val>) =>

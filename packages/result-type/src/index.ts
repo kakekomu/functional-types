@@ -175,7 +175,12 @@ export const withDefault = <err, val>(
 export const fromNullable = <err, val>(
   testedValue: val | undefined | null,
   errorMessage: err
-): Result<err, val> => (testedValue ? Ok(testedValue) : Err(errorMessage))
+): Result<err, val> =>
+  testedValue !== null &&
+  testedValue !== undefined &&
+  (typeof testedValue !== "number" || !isNaN(testedValue))
+    ? Ok(testedValue)
+    : Err(errorMessage)
 
 /** Helper function to determine if a Result is a success */
 export const isOk = <err, val>(remoteData: Result<err, val>) =>

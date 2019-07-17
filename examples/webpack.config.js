@@ -1,10 +1,10 @@
 const path = require("path")
 module.exports = {
   entry: {
-    simple: "./examples/simple/index.js",
-    "simple-ts": "./examples/simple-ts/index.js",
-    mappings: "./examples/mappings/index.js",
-    "react-hooks": "./examples/react-hooks/index.js"
+    simple: "./simple/index.js",
+    "simple-ts": "./simple-ts/index.js",
+    mappings: "./mappings/index.js",
+    "react-hooks": "./react-hooks/index.js"
   },
   output: {
     path: path.resolve("dist"),

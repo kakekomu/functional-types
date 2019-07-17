@@ -28,6 +28,10 @@ describe("Remote.fromNullable", () => {
     expect(Remote.fromNullable(null, "error")).toEqual(Failure("error"))
   })
 
+  test("convert a NaN value to Result", () => {
+    expect(Remote.fromNullable(NaN, "error")).toEqual(Failure("error"))
+  })
+
   test("convert a non null value to RemoteData", () => {
     expect(Remote.fromNullable("value", "error")).toEqual(Success("value"))
   })
