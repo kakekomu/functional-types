@@ -2,7 +2,6 @@
   "name": "functional-types",
   "version": "1.2.0-alpha",
   "private": true,
-  "useWorkspaces": true,
   "workspaces": [
     "packages/*",
     "examples"
@@ -17,6 +16,7 @@
     "test": "jest",
     "start:examples": "yarn workspace examples start",
     "release": "lerna version",
+    "bootstrap-ci": "lerna bootstrap --ci",
     "release-ci": "lerna publish from-git"
   },
   "keywords": [],
