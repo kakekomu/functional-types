@@ -1,5 +1,6 @@
 {
   "name": "functional-types",
+  "version": "1.2.0-beta",
   "private": true,
   "useWorkspaces": true,
   "workspaces": [
@@ -33,6 +34,5 @@
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.5.3"
-  },
-  "version": "1.2.0-beta"
+  }
 }
