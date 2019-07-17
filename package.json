@@ -14,8 +14,7 @@
   "scripts": {
     "build": "lerna run build --parallel",
     "test": "jest",
-    "start:examples": "",
-    "release": "lerna version"
+    "start:examples": "yarn workspace examples start"
   },
   "keywords": [],
   "author": "Kakekomu",

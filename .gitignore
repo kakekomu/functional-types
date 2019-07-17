@@ -1,3 +1,4 @@
-/node_modules
+node_modules
 /packages/**/lib
 .rpt2_cache
+yarn-error.log

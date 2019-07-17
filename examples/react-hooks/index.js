@@ -1,12 +1,14 @@
-import React, { useEffect } from "react"
-import ReactDOM from "react-dom"
-import Remote from "@kakekomu/remote-data"
+import React from "react"
+import * as remote from "@kakekomu/remote-data"
 
-const App = () => {
+const ReactHooksExample = () => {
   // The useRemoteData hook takes care of the whole lifecycle.
   // The fetchRemoteData will trigger the request.
-  const [webData, fetchRemoteData] = Remote.useRemoteData(() =>
-    Remote.get("http://httpbin.org/get?greeting=Hello%20World")
+  const [webData, fetchRemoteData] = remote.useRemoteData(() =>
+    remote.mapAsync(
+      remote.get("http://httpbin.org/get?greeting=Hello%20World"),
+      resBody => resBody.args.greeting
+    )
   )
 
   // We can switch the rendered HTML based on the state of our webData
@@ -30,5 +32,4 @@ const App = () => {
   }
 }
 
-const domContainer = document.querySelector("#react")
-ReactDOM.render(React.createElement(App), domContainer)
+export default ReactHooksExample

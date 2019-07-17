@@ -1,8 +1,8 @@
 import React, { useState } from "react"
-import ReactDOM from "react-dom"
-import Remote, { NotAsked, Loading, Success } from "@kakekomu/remote-data"
+import { NotAsked, Loading } from "@kakekomu/remote-data"
+import * as remote from "@kakekomu/remote-data"
 
-const App = () => {
+const MappingsExample = () => {
   const [webData, setWebData] = useState(NotAsked())
   const [name, setName] = useState("")
 
@@ -11,14 +11,14 @@ const App = () => {
 
     // Doing multiple requests at once
     const responses = await Promise.all([
-      Remote.get("http://httpbin.org/get?greeting=Hello"),
-      Remote.post("http://httpbin.org/post", { name }),
-      Remote.get("https://httpbin.org/uuid")
+      remote.get("http://httpbin.org/get?greeting=Hello"),
+      remote.post("http://httpbin.org/post", { name }),
+      remote.get("https://httpbin.org/uuid")
     ])
 
     // Mapping the list of RemoteData to a constructor function
     // List (RemoteData a) -> (List a -> b) -> RemoteData b
-    const newWebData = Remote.mapMany(
+    const newWebData = remote.mapMany(
       responses,
       (greetingResp, nameResp, uuidResp) => ({
         greeting: greetingResp.args.greeting,
@@ -66,5 +66,4 @@ const App = () => {
   }
 }
 
-const domContainer = document.querySelector("#react")
-ReactDOM.render(React.createElement(App), domContainer)
+export default MappingsExample

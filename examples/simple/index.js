@@ -1,21 +1,21 @@
 import React, { useState } from "react"
-import ReactDOM from "react-dom"
-import Remote, { NotAsked, Loading } from "@kakekomu/remote-data"
+import { NotAsked, Loading } from "@kakekomu/remote-data"
+import * as remote from "@kakekomu/remote-data"
 
-const App = () => {
+const SimpleExample = () => {
   const [webData, setWebData] = useState(NotAsked())
 
   const fetchGreeting = () => {
     // Setting the webData to Loading before starting the request
     setWebData(Loading())
 
-    // The Remote.get function is a wrapper around axios' get function.
+    // The remote.get function is a wrapper around axios' get function.
     // It makes an HTTP get request, and returns a Failure with the error message or a
     // Success with the response object.
-    Remote.get("http://httpbin.org/get?greeting=Hello%20World").then(resp => {
+    remote.get("http://httpbin.org/get?greeting=Hello%20World").then(resp => {
       // We could simply set the webData to the response, or do some mapping on it.
       // This time we take the greeting out of the response body.
-      setWebData(Remote.map(resp, resBody => resBody.args.greeting))
+      setWebData(remote.map(resp, resBody => resBody.args.greeting))
     })
   }
 
@@ -40,5 +40,4 @@ const App = () => {
   }
 }
 
-const domContainer = document.querySelector("#react")
-ReactDOM.render(React.createElement(App), domContainer)
+export default SimpleExample
