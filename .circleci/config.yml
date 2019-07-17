@@ -54,7 +54,7 @@ jobs:
       - checkout
 
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/project/.npmrc
-      - run: npm run release-ci --yes
+      - run: npm run release-ci
 
 workflows:
   version: 2

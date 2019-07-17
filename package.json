@@ -17,7 +17,7 @@
     "test": "jest",
     "start:examples": "yarn workspace examples start",
     "release": "lerna version",
-    "release-ci": "lerna publish from-git"
+    "release-ci": "lerna publish from-git --yes"
   },
   "keywords": [],
   "author": "Kakekomu",
