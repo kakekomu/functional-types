@@ -27,10 +27,9 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: yarn add global lerna -W
-
-      - run: yarn bootstrap-ci
-      - run: yarn build
+      - run: npm ci
+      - run: npm run bootstrap
+      - run: npm run build
 
       - save_cache:
           paths:
@@ -45,7 +44,7 @@ jobs:
     <<: *defaults
     steps:
       - *attach_workspace
-      - run: yarn test
+      - run: npm run test
 
   publish:
     <<: *defaults
@@ -55,7 +54,7 @@ jobs:
       - checkout
 
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/project/.npmrc
-      - run: yarn release-ci --yes
+      - run: npm run release-ci --yes
 
 workflows:
   version: 2
