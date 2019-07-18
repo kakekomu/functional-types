@@ -2,30 +2,25 @@
 
 export type Result<err, val> = IErr<err> | IOk<val>
 
-/** Type representing a remote data. No request is made to fetch remote data. */
-export interface INotAsked {
-  type: "NotAsked"
-}
-
-/** Type representing a remote data. Request to fetch failed. */
+/** Type representing a failure with an error message. */
 export interface IErr<err> {
   type: "Err"
   error: err
 }
 
-/** Result constructor function. Request to fetch failed. */
+/** Result constructor function. */
 export const Err = <err, val>(error: err): Result<err, val> => ({
   type: "Err",
   error
 })
 
-/** Type representing a remote data. Request to fetch succeeded. */
+/** Type representing a success. */
 export interface IOk<val> {
   type: "Ok"
   value: val
 }
 
-/** Result constructor function. Request to fetch succeeded. */
+/** Result constructor function. */
 export const Ok = <err, val>(value: val): Result<err, val> => ({
   type: "Ok",
   value
