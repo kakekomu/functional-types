@@ -27,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/kakekomu/remote-data/issues"
   },
-  "homepage": "https://github.com/kakekomu/remote-data#readme"
+  "homepage": "https://github.com/kakekomu/remote-data#readme",
+  "publishConfig": {
+    "access": "public"
+  }
 }
