@@ -53,7 +53,7 @@ jobs:
       - *attach_workspace
       - checkout
 
-      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/project/.npmrc
+      - run: npm set //registry.npmjs.org/:_authToken=$NPM_TOKEN
       - run: npm whoami
       - run: npm run release-ci
 
