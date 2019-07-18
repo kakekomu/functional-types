@@ -168,7 +168,6 @@ export const withDefault = <err, val>(
 
 /** Creates a Result value from nullable primitive value.
  *  It will return a Err if the input value is null or undefined.
- *  Good for use with other libraries.
  *
  *  a? -> err -> Result err a
  */
@@ -181,6 +180,17 @@ export const fromNullable = <err, val>(
   (typeof testedValue !== "number" || !isNaN(testedValue))
     ? Ok(testedValue)
     : Err(errorMessage)
+
+/** Creates a Result value based on the return of a TypeScript guard.
+ *  It will return a Err if the input value is null or undefined.
+ *
+ *  unknown -> err -> (unknown -> boolean) -> Result err a
+ */
+export const fromGuarded = <err, val>(
+  testedValue: unknown,
+  errorMessage: err,
+  validator: (testedValue: unknown) => testedValue is val
+) => (validator(testedValue) ? Ok(testedValue) : Err(errorMessage))
 
 /** Helper function to determine if a Result is a success */
 export const isOk = <err, val>(remoteData: Result<err, val>) =>

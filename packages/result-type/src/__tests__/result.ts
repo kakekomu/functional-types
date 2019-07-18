@@ -29,6 +29,30 @@ describe("Result.fromNullable", () => {
   })
 })
 
+describe("Result.fromGuarded", () => {
+  const testedValue: unknown = 1
+
+  test("test a value with a guard - fail", () => {
+    expect(
+      Result.fromGuarded(
+        testedValue,
+        "error",
+        (x: unknown): x is string => typeof x === "string"
+      )
+    ).toEqual(Err("error"))
+  })
+
+  test("test a value with a guard - succeed", () => {
+    expect(
+      Result.fromGuarded(
+        testedValue,
+        "error",
+        (x: unknown): x is number => typeof x === "number"
+      )
+    ).toEqual(Ok(1))
+  })
+})
+
 describe("Result.map", () => {
   const func = (val: string) => val + "!"
 
