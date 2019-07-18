@@ -256,7 +256,7 @@ export const mapAsync = <err, val, returnVal>(
  *
  *  AsyncRemoteData err a -> (err -> errB) -> AsyncRemoteData errB a
  */
-export const mapFailureAsyn = <err, val, newerr>(
+export const mapFailureAsync = <err, val, newerr>(
   asyncRemoteData: AsyncRemoteData<err, val>,
   f: (error: err) => newerr
 ): AsyncRemoteData<newerr, val> =>
