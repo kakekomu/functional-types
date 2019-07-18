@@ -236,10 +236,7 @@ export const toResult = <err, val>(
 
 // ASYNC HELPERS
 
-/** Map a function f over an AsyncRemoteData value.
- *  If and only if the RemoteData value is a success, this function will
- *  return a new RemoteData with its wrapped value applied to f.
- *  Otherwise it returns the original RemoteData value.
+/** The same as remote.map but with an AsyncRemoteData value
  *
  *  AsyncRemoteData err a -> (a -> b) -> AsyncRemoteData err b
  */
@@ -249,10 +246,7 @@ export const mapAsync = <err, val, returnVal>(
 ): AsyncRemoteData<err, returnVal> =>
   asyncRemoteData.then(remoteData => map(remoteData, f))
 
-/** Map a function f over an AsyncRemoteData error.
- *  If and only if the RemoteData value is a failure, this function will
- *  return a new RemoteData with its wrapped error applied to f.
- *  Otherwise it returns the original AsyncRemoteData.
+/** The same as remote.mapFailure but with an AsyncRemoteData value
  *
  *  AsyncRemoteData err a -> (err -> errB) -> AsyncRemoteData errB a
  */
@@ -262,8 +256,7 @@ export const mapFailureAsync = <err, val, newerr>(
 ): AsyncRemoteData<newerr, val> =>
   asyncRemoteData.then(remoteData => mapFailure(remoteData, f))
 
-/** Map two functions fErr and fVal for Failure and Success cases respectively.
- *  Same as remote.mapFailure(remote.map(remoteData, fVal), fErr)
+/** The same as remote.mapBoth but with an AsyncRemoteData value
  *
  *  AsyncRemoteData err val -> (err -> errB) -> (val -> valB) -> AsyncRemoteData errB valB
  */
@@ -282,10 +275,7 @@ export const sequenceAsync = <err, val>(
     sequence(remoteDataList)
   )
 
-/** Also known as bind or flatMap. It is a good way to chain dependent actions.
- *  If and only if the input value is a success, this function will
- *  apply its wrapped value to f.
- *  Otherwise it returns the original AsyncRemoteData.
+/** The same as remote.andThen but with an AsyncRemoteData value
  *
  *  AsyncRemoteData err a -> (a -> AsyncRemoteData err b) -> AsyncRemoteData err b
  */
@@ -295,11 +285,7 @@ export const andThenAsync = <err, val, returnVal>(
 ): AsyncRemoteData<err, returnVal> =>
   asyncRemoteData.then(remoteData => andThen(remoteData, f))
 
-/** Also known as apply. Same as map, but the function that operates on the
- *  value is also wrapped in a AsyncRemoteData.
- *  If and only if both AsyncRemoteData values are successes, this function will
- *  return the wrapped value applied to f.
- *  Otherwise it returns the original AsyncRemoteData value.
+/** The same as remote.ap but with an AsyncRemoteData value
  *
  *  AsyncRemoteData err a -> AsyncRemoteData err (a -> b) -> AsyncRemoteData err b
  */
