@@ -1,4 +1,4 @@
-import * as Result from "@kakekomu/result-type"
+import * as result from "@kakekomu/result-type"
 // RemoteData type constructors
 
 export type RemoteData<err, val> =
@@ -227,12 +227,23 @@ export const isFailure = <err, val>(remoteData: RemoteData<err, val>) =>
 export const toResult = <err, val>(
   remoteData: RemoteData<err, val>,
   defaultError: err
-): Result.Result<err, val> =>
+): result.Result<err, val> =>
   remoteData.type === "Success"
-    ? Result.Ok(remoteData.value)
+    ? result.Ok(remoteData.value)
     : remoteData.type === "Failure"
-    ? Result.Err(remoteData.error)
-    : Result.Err(defaultError)
+    ? result.Err(remoteData.error)
+    : result.Err(defaultError)
+
+/** Converts a Result type to a RemoteData with a default error value
+ *
+ *  RemoteData err a -> err -> Result err a
+ */
+export const fromResult = <err, val>(
+  resultData: result.Result<err, val>
+): RemoteData<err, val> =>
+  resultData.type === "Ok"
+    ? Success(resultData.value)
+    : Failure(resultData.error)
 
 // ASYNC HELPERS
 
