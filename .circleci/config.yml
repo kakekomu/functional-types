@@ -28,13 +28,14 @@ jobs:
             - v1-dependencies-
 
       - run: yarn install
-      - run: yarn bootstrap
-      - run: yarn build
 
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "yarn.lock" }}
+
+      - run: yarn build
+
       - persist_to_workspace:
           root: ~/project
           paths:
