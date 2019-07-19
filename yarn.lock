@@ -415,12 +415,6 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^12.0.9"
 
-"@kakekomu/remote-data@1.2.0-alpha.0":
-  version "1.2.0-alpha.1"
-  dependencies:
-    "@kakekomu/result-type" "^1.2.0-alpha.1"
-    axios "^0.19.0"
-
 "@lerna/add@3.16.0":
   version "3.16.0"
   resolved "https://registry.yarnpkg.com/@lerna/add/-/add-3.16.0.tgz#f871eda820fe43b868c3a6154906799485c33342"
