@@ -41,10 +41,10 @@ export type ResultList<err, T> = { [K in keyof T]: Result<err, T[K]> }
  *  Result err a -> (a -> b) -> Result err b
  */
 export const map = <err, val, returnVal>(
-  remoteData: Result<err, val>,
+  result: Result<err, val>,
   f: (value: val) => returnVal
 ): Result<err, returnVal> =>
-  remoteData.type === "Ok" ? Ok(f(remoteData.value)) : remoteData
+  result.type === "Ok" ? Ok(f(result.value)) : result
 
 type GetErrorType<T> = T extends ResultList<infer err, any[]> ? err : never
 
@@ -72,32 +72,32 @@ export const mapMany = <remoteVals extends any[], returnVal>(
  *  Result err a -> (err -> errB) -> Result errB a
  */
 export const mapErr = <err, val, newerr>(
-  remoteData: Result<err, val>,
+  result: Result<err, val>,
   f: (error: err) => newerr
 ): Result<newerr, val> =>
-  remoteData.type === "Err" ? Err(f(remoteData.error)) : remoteData
+  result.type === "Err" ? Err(f(result.error)) : result
 
 /** Map two functions fErr and fVal for Err and Ok cases respectively.
- *  Same as remote.mapErr(remote.map(remoteData, fVal), fErr)
+ *  Same as remote.mapErr(remote.map(result, fVal), fErr)
  *
  *  Result err val -> (err -> errB) -> (val -> valB) -> Result errB valB
  */
 export const mapBoth = <err, val, newerr, newval>(
-  remoteData: Result<err, val>,
+  result: Result<err, val>,
   fErr: (error: err) => newerr,
   fVal: (value: val) => newval
 ): Result<newerr, newval> =>
-  remoteData.type === "Err"
-    ? Err(fErr(remoteData.error))
-    : remoteData.type === "Ok"
-    ? Ok(fVal(remoteData.value))
-    : remoteData
+  result.type === "Err"
+    ? Err(fErr(result.error))
+    : result.type === "Ok"
+    ? Ok(fVal(result.value))
+    : result
 
 /** List (Result err a) -> Result err (List a) */
 export const sequence = <err, val>(
-  remoteDataList: Array<Result<err, val>>
+  resultList: Array<Result<err, val>>
 ): Result<err, val[]> =>
-  remoteDataList.reduce(
+  resultList.reduce(
     (prev, current) =>
       prev.type === "Ok" && current.type === "Ok"
         ? Ok([...prev.value, current.value])
@@ -129,10 +129,9 @@ export const traverse = <err, val>(
  *  Result err a -> (a -> Result err b) -> Result err b
  */
 export const andThen = <err, val, returnVal>(
-  remoteData: Result<err, val>,
+  result: Result<err, val>,
   f: (value: val) => Result<err, returnVal>
-): Result<err, returnVal> =>
-  remoteData.type === "Ok" ? f(remoteData.value) : remoteData
+): Result<err, returnVal> => (result.type === "Ok" ? f(result.value) : result)
 
 /** Also known as apply. Same as map, but the function that operates on the
  *  value is also wrapped in a Result.
@@ -143,12 +142,10 @@ export const andThen = <err, val, returnVal>(
  *  Result err a -> Result err (a -> b) -> Result err b
  */
 export const ap = <err, val, returnVal>(
-  remoteData: Result<err, val>,
+  result: Result<err, val>,
   applicativeF: Result<err, (value: val) => returnVal>
 ): Result<err, returnVal> =>
-  applicativeF.type === "Ok"
-    ? map(remoteData, applicativeF.value)
-    : applicativeF
+  applicativeF.type === "Ok" ? map(result, applicativeF.value) : applicativeF
 
 /** Unwraps a Result value to a primitive value with a default.
  *  If and only if the Result is a value this function will return its
@@ -157,9 +154,9 @@ export const ap = <err, val, returnVal>(
  *  Result err a -> a -> a
  */
 export const withDefault = <err, val>(
-  remoteData: Result<err, val>,
+  result: Result<err, val>,
   defaultValue: val
-): val => (remoteData.type === "Ok" ? remoteData.value : defaultValue)
+): val => (result.type === "Ok" ? result.value : defaultValue)
 
 /** Creates a Result value from nullable primitive value.
  *  It will return a Err if the input value is null or undefined.
@@ -188,9 +185,92 @@ export const fromGuarded = <err, val>(
 ) => (validator(testedValue) ? Ok(testedValue) : Err(errorMessage))
 
 /** Helper function to determine if a Result is a success */
-export const isOk = <err, val>(remoteData: Result<err, val>) =>
-  remoteData.type === "Ok"
+export const isOk = <err, val>(result: Result<err, val>) => result.type === "Ok"
 
 /** Helper function to determine if a Result is a failure */
-export const isErr = <err, val>(remoteData: Result<err, val>) =>
-  remoteData.type === "Err"
+export const isErr = <err, val>(result: Result<err, val>) =>
+  result.type === "Err"
+
+// ASYNC HELPERS
+
+/** The same as remote.map but with an AsyncResult value
+ *
+ *  AsyncResult err a -> (a -> b) -> AsyncResult err b
+ */
+export const mapAsync = <err, val, returnVal>(
+  asyncResult: AsyncResult<err, val>,
+  f: (value: val) => returnVal
+): AsyncResult<err, returnVal> => asyncResult.then(result => map(result, f))
+
+/** The same as remote.mapFailure but with an AsyncResult value
+ *
+ *  AsyncResult err a -> (err -> errB) -> AsyncResult errB a
+ */
+export const mapErrAsync = <err, val, newerr>(
+  asyncResult: AsyncResult<err, val>,
+  f: (error: err) => newerr
+): AsyncResult<newerr, val> => asyncResult.then(result => mapErr(result, f))
+
+/** The same as remote.mapBoth but with an AsyncResult value
+ *
+ *  AsyncResult err val -> (err -> errB) -> (val -> valB) -> AsyncResult errB valB
+ */
+export const mapBothAsync = <err, val, newerr, newval>(
+  asyncResult: AsyncResult<err, val>,
+  fErr: (error: err) => newerr,
+  fVal: (value: val) => newval
+): AsyncResult<newerr, newval> =>
+  asyncResult.then(result => mapBoth(result, fErr, fVal))
+
+/** List (AsyncResult err a) -> AsyncResult err (List a) */
+export const sequenceAsync = <err, val>(
+  asyncResultList: Array<AsyncResult<err, val>>
+): AsyncResult<err, val[]> =>
+  Promise.all(asyncResultList).then(resultList => sequence(resultList))
+
+/** The same as remote.andThen but with an AsyncResult value
+ *
+ *  AsyncResult err a -> (a -> AsyncResult err b) -> AsyncResult err b
+ */
+export const andThenAsync = <err, val, returnVal>(
+  asyncResult: AsyncResult<err, val>,
+  f: (value: val) => Result<err, returnVal>
+): AsyncResult<err, returnVal> => asyncResult.then(result => andThen(result, f))
+
+/** The same as remote.andThen but with an async function
+ *
+ *  AsyncResult err a -> (a -> AsyncResult err b) -> AsyncResult err b
+ */
+export const andThenAsyncF = <err, val, returnVal>(
+  result: Result<err, val>,
+  f: (value: val) => AsyncResult<err, returnVal>
+): AsyncResult<err, returnVal> =>
+  result.type === "Ok"
+    ? f(result.value)
+    : new Promise(resolve => resolve(result))
+
+/** The same as remote.andThen but with an async function
+ *
+ *  AsyncResult err a -> (a -> AsyncResult err b) -> AsyncResult err b
+ */
+export const andThenAsyncRF = <err, val, returnVal>(
+  asyncResult: AsyncResult<err, val>,
+  f: (value: val) => AsyncResult<err, returnVal>
+): AsyncResult<err, returnVal> =>
+  asyncResult.then(result =>
+    result.type === "Ok"
+      ? f(result.value)
+      : new Promise(resolve => resolve(result))
+  )
+
+/** The same as remote.ap but with an AsyncResult value
+ *
+ *  AsyncResult err a -> AsyncResult err (a -> b) -> AsyncResult err b
+ */
+export const apAsync = <err, val, returnVal>(
+  asyncResult: AsyncResult<err, val>,
+  asyncApplicativeF: AsyncResult<err, (value: val) => returnVal>
+): AsyncResult<err, returnVal> =>
+  Promise.all([asyncResult, asyncApplicativeF]).then(([result, applicativeF]) =>
+    ap(result, applicativeF)
+  )
