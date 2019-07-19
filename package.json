@@ -11,7 +11,7 @@
     "url": "git+https://github.com/kakekomu/remote-data.git"
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --use-workspaces",
     "build": "lerna run build --parallel",
     "clean": "lerna run clean --parallel",
     "test": "jest",
