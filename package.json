@@ -1,6 +1,6 @@
 {
   "name": "functional-types",
-  "version": "1.2.0-alpha",
+  "version": "1.2.0-alpha-1",
   "private": true,
   "workspaces": [
     "packages/*",
