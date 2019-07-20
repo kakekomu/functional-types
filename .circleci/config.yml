@@ -54,7 +54,7 @@ jobs:
       - *attach_workspace
       - checkout
 
-      - run: yarn config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
+      - run: npm set //registry.npmjs.org/:_authToken=$NPM_TOKEN
       - run: yarn release-ci
 
 workflows:
