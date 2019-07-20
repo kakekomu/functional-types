@@ -12,7 +12,7 @@
   },
   "scripts": {
     "bootstrap": "lerna bootstrap --use-workspaces",
-    "build": "lerna run build --parallel",
+    "build": "lerna run build",
     "clean": "lerna run clean --parallel",
     "test": "jest",
     "start:examples": "yarn workspace examples start",
