@@ -135,18 +135,10 @@ export const sequence = <err, val>(
   )
 
 /** List a -> (a -> RemoteData err a) -> RemoteData err (List a) */
-export const traverse = <err, val>(
+export const traverse = <err, val, returnVal>(
   valueList: val[],
-  f: (value: val) => RemoteData<err, val>
-) =>
-  valueList.reduce((prev, current) => {
-    const applied = f(current)
-    return prev.type === "Success" && applied.type === "Success"
-      ? Success([...prev.value, applied.value])
-      : prev.type === "Success" && applied.type !== "Success"
-      ? current
-      : prev
-  }, Success([]))
+  f: (value: val) => RemoteData<err, returnVal>
+): RemoteData<err, returnVal[]> => sequence(valueList.map(value => f(value)))
 
 /** Also known as bind or flatMap. It is a good way to chain dependent actions.
  *  If and only if the input value is a success, this function will
