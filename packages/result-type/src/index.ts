@@ -177,11 +177,13 @@ export const fromGuarded = <err, val>(
 ) => (validator(testedValue) ? Ok(testedValue) : Err(errorMessage))
 
 /** Helper function to determine if a Result is a success */
-export const isOk = <err, val>(result: Result<err, val>) => result.type === "Ok"
+export const isOk = <err, val>(result: Result<err, val>): result is IOk<val> =>
+  result.type === "Ok"
 
 /** Helper function to determine if a Result is a failure */
-export const isErr = <err, val>(result: Result<err, val>) =>
-  result.type === "Err"
+export const isErr = <err, val>(
+  result: Result<err, val>
+): result is IErr<err> => result.type === "Err"
 
 // ASYNC HELPERS
 

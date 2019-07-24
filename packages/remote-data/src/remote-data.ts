@@ -197,20 +197,24 @@ export const fromNullable = <err, val>(
     : Failure(errorMessage)
 
 /** Helper function to determine if a RemoteData is a success */
-export const isNotAsked = <err, val>(remoteData: RemoteData<err, val>) =>
-  remoteData.type === "NotAsked"
+export const isNotAsked = <err, val>(
+  remoteData: RemoteData<err, val>
+): remoteData is INotAsked => remoteData.type === "NotAsked"
 
 /** Helper function to determine if a RemoteData is a success */
-export const isLoading = <err, val>(remoteData: RemoteData<err, val>) =>
-  remoteData.type === "Loading"
+export const isLoading = <err, val>(
+  remoteData: RemoteData<err, val>
+): remoteData is ILoading => remoteData.type === "Loading"
 
 /** Helper function to determine if a RemoteData is a success */
-export const isSuccess = <err, val>(remoteData: RemoteData<err, val>) =>
-  remoteData.type === "Success"
+export const isSuccess = <err, val>(
+  remoteData: RemoteData<err, val>
+): remoteData is ISuccess<val> => remoteData.type === "Success"
 
 /** Helper function to determine if a RemoteData is a failure */
-export const isFailure = <err, val>(remoteData: RemoteData<err, val>) =>
-  remoteData.type === "Failure"
+export const isFailure = <err, val>(
+  remoteData: RemoteData<err, val>
+): remoteData is IFailure<err> => remoteData.type === "Failure"
 
 /** Converts a RemoteData type to a Result type with a default error value
  *
