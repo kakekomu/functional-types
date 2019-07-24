@@ -4,8 +4,8 @@ export type Result<err, val> = IErr<err> | IOk<val>
 
 /** Type representing a failure with an error message. */
 export interface IErr<err> {
-  type: "Err"
-  error: err
+  readonly type: "Err"
+  readonly error: err
 }
 
 /** Result constructor function. */
@@ -16,8 +16,8 @@ export const Err = <err, val>(error: err): Result<err, val> => ({
 
 /** Type representing a success. */
 export interface IOk<val> {
-  type: "Ok"
-  value: val
+  readonly type: "Ok"
+  readonly value: val
 }
 
 /** Result constructor function. */

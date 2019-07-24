@@ -9,7 +9,7 @@ export type RemoteData<err, val> =
 
 /** Type representing a remote data. No request is made to fetch remote data. */
 export interface INotAsked {
-  type: "NotAsked"
+  readonly type: "NotAsked"
 }
 
 /** RemoteData constructor function. No request is made to fetch remote data. */
@@ -19,7 +19,7 @@ export const NotAsked = <err, val>(): RemoteData<err, val> => ({
 
 /** Type representing a remote data. Request is made to fetch remote data. */
 export interface ILoading {
-  type: "Loading"
+  readonly type: "Loading"
 }
 
 /** RemoteData constructor function. Request is made to fetch remote data. */
@@ -29,8 +29,8 @@ export const Loading = <err, val>(): RemoteData<err, val> => ({
 
 /** Type representing a remote data. Request to fetch failed. */
 export interface IFailure<err> {
-  type: "Failure"
-  error: err
+  readonly type: "Failure"
+  readonly error: err
 }
 
 /** RemoteData constructor function. Request to fetch failed. */
@@ -41,8 +41,8 @@ export const Failure = <err, val>(error: err): RemoteData<err, val> => ({
 
 /** Type representing a remote data. Request to fetch succeeded. */
 export interface ISuccess<val> {
-  type: "Success"
-  value: val
+  readonly type: "Success"
+  readonly value: val
 }
 
 /** RemoteData constructor function. Request to fetch succeeded. */
