@@ -21,5 +21,8 @@ module.exports = {
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"]
+  },
+  devServer: {
+    open: true
   }
 }

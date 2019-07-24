@@ -1,12 +1,18 @@
-import React from "react"
 import * as remote from "@kakekomu/remote-data"
+import React, { FunctionComponent } from "react"
 
-const ReactHooksExample = () => {
+interface IResp {
+  args: {
+    greeting: string
+  }
+}
+
+const ReactHooksExample: FunctionComponent = () => {
   // The useRemoteData hook takes care of the whole lifecycle.
   // The fetchRemoteData will trigger the request.
   const [webData, fetchRemoteData] = remote.useRemoteData(() =>
     remote.mapAsync(
-      remote.get("http://httpbin.org/get?greeting=Hello%20World"),
+      remote.get<IResp>("http://httpbin.org/get?greeting=Hello%20World"),
       resBody => resBody.args.greeting
     )
   )

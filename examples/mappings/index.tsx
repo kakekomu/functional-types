@@ -1,19 +1,47 @@
-import React, { useState } from "react"
-import { NotAsked, Loading } from "@kakekomu/remote-data"
+import { Loading, NotAsked } from "@kakekomu/remote-data"
 import * as remote from "@kakekomu/remote-data"
+import React, { FunctionComponent, useState } from "react"
 
-const MappingsExample = () => {
-  const [webData, setWebData] = useState(NotAsked())
-  const [name, setName] = useState("")
+interface IGreetingResp {
+  args: {
+    greeting: string
+  }
+}
+
+interface INameParams {
+  name: string
+}
+
+interface INameResp {
+  json: {
+    name: string
+  }
+}
+
+interface IUUIDResp {
+  uuid: string
+}
+
+interface IWebData {
+  greeting: string
+  name: string
+  uuid: string
+}
+
+const MappingsExample: FunctionComponent = () => {
+  const [webData, setWebData] = useState<remote.WebData<IWebData>>(NotAsked())
+  const [nameInput, setNameInput] = useState("")
 
   const fetchWebData = async () => {
     setWebData(Loading())
 
     // Doing multiple requests at once
     const responses = await Promise.all([
-      remote.get("http://httpbin.org/get?greeting=Hello"),
-      remote.post("http://httpbin.org/post", { name }),
-      remote.get("https://httpbin.org/uuid")
+      remote.get<IGreetingResp>("http://httpbin.org/get?greeting=Hello"),
+      remote.post<INameResp, INameParams>("http://httpbin.org/post", {
+        name: nameInput
+      }),
+      remote.get<IUUIDResp>("https://httpbin.org/uuid")
     ])
 
     // Mapping the list of RemoteData to a constructor function
@@ -30,11 +58,16 @@ const MappingsExample = () => {
     setWebData(newWebData)
   }
 
+  const handleEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNameInput(e.currentTarget.value)
+  }
+
   switch (webData.type) {
     case "NotAsked": {
       return (
         <div>
-          <input onChange={e => setName(e.target.value)} />
+          <label>Enter your name: </label>
+          <input onChange={handleEvent} />
           <button onClick={fetchWebData}>Fetch</button>
         </div>
       )

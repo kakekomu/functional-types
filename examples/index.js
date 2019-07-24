@@ -15,7 +15,7 @@ const App = () => (
   <div>
     <h1>RemoteData examples</h1>
     <section>
-      <h2>Simple Example</h2>
+      <h2>Simple Example (Vanilla JS)</h2>
       <a href="simple/index.js">Source code</a>
       <Example>
         <SimpleExample />
@@ -30,14 +30,14 @@ const App = () => (
     </section>
     <section>
       <h2>Mappings Example</h2>
-      <a href="mappings/index.js">Source code</a>
+      <a href="mappings/index.tsx">Source code</a>
       <Example>
         <MappingsExample />
       </Example>
     </section>
     <section>
       <h2>Using React Hooks (useRemoteData)</h2>
-      <a href="react-hooks/index.js">Source code</a>
+      <a href="react-hooks/index.tsx">Source code</a>
       <Example>
         <ReactHooksExample />
       </Example>
