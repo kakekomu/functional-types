@@ -196,6 +196,18 @@ export const mapAsync = <err, val, returnVal>(
   f: (value: val) => returnVal
 ): AsyncResult<err, returnVal> => asyncResult.then(result => map(result, f))
 
+/** The same as remote.map but with an async function
+ *
+ *  Result err a -> (a -> Promise b) -> AsyncResult err b
+ */
+export const mapAsyncF = <err, val, returnVal>(
+  result: Result<err, val>,
+  f: (value: val) => Promise<returnVal>
+): AsyncResult<err, returnVal> =>
+  result.type === "Ok"
+    ? f(result.value).then(asyncResult => Ok(asyncResult))
+    : new Promise(resolve => resolve(result))
+
 /** The same as remote.mapFailure but with an AsyncResult value
  *
  *  AsyncResult err a -> (err -> errB) -> AsyncResult errB a
@@ -268,3 +280,10 @@ export const apAsync = <err, val, returnVal>(
   Promise.all([asyncResult, asyncApplicativeF]).then(([result, applicativeF]) =>
     ap(result, applicativeF)
   )
+
+/** List a -> (a -> AsynResult err a) -> AsyncResult err (List a) */
+export const traverseAsyncF = <err, val, returnVal>(
+  valueList: val[],
+  f: (value: val) => AsyncResult<err, returnVal>
+): AsyncResult<err, returnVal[]> =>
+  sequenceAsync(valueList.map(value => f(value)))
