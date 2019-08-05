@@ -12,6 +12,7 @@ import {
 
 type HTTPMethod = "get" | "post" | "put" | "patch" | "delete"
 
+export type AxiosError = AxiosError
 export type WebData<T> = RemoteData<AxiosError, T>
 export type AsyncWebData<T> = AsyncRemoteData<AxiosError, T>
 
