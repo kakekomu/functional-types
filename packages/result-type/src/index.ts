@@ -64,6 +64,23 @@ export const mapMany = <remoteVals extends any[], returnVal>(
   // @ts-ignore
   map(sequence(remoteArgs), args => f(...args))
 
+/** Map a function f over a tuple of Result values.
+ *  If and only if all the Result values are successes, this function will
+ *  return a new Result with its wrapped value applied to f.
+ *  Otherwise it returns the original Result value.
+ *
+ *  THIS FUNCTION IS STILL IN TESTING
+ *
+ *  t (Result err a) -> (t a -> b) -> Result err b
+ */
+export const mapMany2 = <remoteVals extends any[], returnVal>(
+  ...remoteArgs: remoteVals
+) => (
+  f: (...args: GetValueType<remoteVals>) => returnVal
+): Result<GetErrorType<remoteVals>, returnVal> =>
+  // @ts-ignore
+  map(sequence(remoteArgs), args => f(...args))
+
 /** Map a function f over a Result error.
  *  If and only if the Result value is a failure, this function will
  *  return a new Result with its wrapped error applied to f.
@@ -174,7 +191,8 @@ export const fromGuarded = <err, val>(
   testedValue: unknown,
   errorMessage: err,
   validator: (testedValue: unknown) => testedValue is val
-): Result<err, val> => (validator(testedValue) ? Ok(testedValue) : Err(errorMessage))
+): Result<err, val> =>
+  validator(testedValue) ? Ok(testedValue) : Err(errorMessage)
 
 /** Helper function to determine if a Result is a success */
 export const isOk = <err, val>(result: Result<err, val>): result is IOk<val> =>
@@ -287,3 +305,26 @@ export const traverseAsyncF = <err, val, returnVal>(
   f: (value: val) => AsyncResult<err, returnVal>
 ): AsyncResult<err, returnVal[]> =>
   sequenceAsync(valueList.map(value => f(value)))
+
+/** The same as remote.map but with an async function
+ *
+ *  t (Result err a) -> (t a -> Promise b) -> AsyncResult err b
+ */
+export const mapManyAsyncF = <remoteVals extends any[], returnVal>(
+  remoteArgs: remoteVals,
+  f: (...args: GetValueType<remoteVals>) => Promise<returnVal>
+): AsyncResult<GetErrorType<remoteVals>, returnVal> =>
+  // @ts-ignore
+  mapAsyncF(sequence(remoteArgs), args => f(...args))
+
+/** The same as remote.map but with an async function
+ *
+ *  t (Result err a) -> (t a -> Promise b) -> AsyncResult err b
+ */
+export const mapManyAsyncF2 = <remoteVals extends any[], returnVal>(
+  ...remoteArgs: remoteVals
+) => (
+  f: (...args: GetValueType<remoteVals>) => Promise<returnVal>
+): AsyncResult<GetErrorType<remoteVals>, returnVal> =>
+  // @ts-ignore
+  mapAsyncF(sequence(remoteArgs), args => f(...args))

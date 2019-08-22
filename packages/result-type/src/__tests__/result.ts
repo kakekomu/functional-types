@@ -116,6 +116,22 @@ describe("Result.mapMany", () => {
   })
 })
 
+describe("Result.mapMany2", () => {
+  const func = (str: string, num: number, bool: boolean) =>
+    `${str}${num}${bool}`
+  test("mapping with a Err value", () => {
+    expect(Result.mapMany2(Ok("a"), Err("error"), Ok(true))(func)).toEqual(
+      Err("error")
+    )
+  })
+
+  test("mapping only Ok values", () => {
+    expect(Result.mapMany2(Ok("a"), Ok(1), Ok(true))(func)).toEqual(
+      Ok("a1true")
+    )
+  })
+})
+
 describe("Result.ap", () => {
   test("applying a Err value", () => {
     expect(Result.ap(Ok(5), Err("error"))).toEqual(Err("error"))
