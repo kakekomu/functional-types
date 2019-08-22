@@ -53,6 +53,20 @@ describe("Result.fromGuarded", () => {
   })
 })
 
+describe("Result.join", () => {
+  test("join where the nested Result is Err", () => {
+    expect(Result.join(Ok(Err("error")))).toEqual(Err("error"))
+  })
+
+  test("join on an Err", () => {
+    expect(Result.join(Err("error"))).toEqual(Err("error"))
+  })
+
+  test("join where both values are Ok", () => {
+    expect(Result.join(Ok(Ok("value")))).toEqual(Ok("value"))
+  })
+})
+
 describe("Result.map", () => {
   const func = (val: string) => val + "!"
 
@@ -111,22 +125,6 @@ describe("Result.mapMany", () => {
 
   test("mapping only Ok values", () => {
     expect(Result.mapMany([Ok("a"), Ok(1), Ok(true)], func)).toEqual(
-      Ok("a1true")
-    )
-  })
-})
-
-describe("Result.mapMany2", () => {
-  const func = (str: string, num: number, bool: boolean) =>
-    `${str}${num}${bool}`
-  test("mapping with a Err value", () => {
-    expect(Result.mapMany2(Ok("a"), Err("error"), Ok(true))(func)).toEqual(
-      Err("error")
-    )
-  })
-
-  test("mapping only Ok values", () => {
-    expect(Result.mapMany2(Ok("a"), Ok(1), Ok(true))(func)).toEqual(
       Ok("a1true")
     )
   })

@@ -33,6 +33,14 @@ export type UnResult<T> = T extends { type: "Ok"; value: infer V } ? V : never
 
 export type ResultList<err, T> = { [K in keyof T]: Result<err, T[K]> }
 
+/** Join a nested Result
+ *
+ *  Result err (Result err a) -> Result err a
+ */
+export const join = <err, val>(
+  result: Result<err, Result<err, val>>
+): Result<err, val> => (result.type === "Ok" ? result.value : result)
+
 /** Map a function f over a Result value.
  *  If and only if the Result value is a success, this function will
  *  return a new Result with its wrapped value applied to f.
@@ -59,23 +67,6 @@ type GetValueType<T> = T extends ResultList<any, infer vals> ? vals : never
  */
 export const mapMany = <remoteVals extends any[], returnVal>(
   remoteArgs: remoteVals,
-  f: (...args: GetValueType<remoteVals>) => returnVal
-): Result<GetErrorType<remoteVals>, returnVal> =>
-  // @ts-ignore
-  map(sequence(remoteArgs), args => f(...args))
-
-/** Map a function f over a tuple of Result values.
- *  If and only if all the Result values are successes, this function will
- *  return a new Result with its wrapped value applied to f.
- *  Otherwise it returns the original Result value.
- *
- *  THIS FUNCTION IS STILL IN TESTING
- *
- *  t (Result err a) -> (t a -> b) -> Result err b
- */
-export const mapMany2 = <remoteVals extends any[], returnVal>(
-  ...remoteArgs: remoteVals
-) => (
   f: (...args: GetValueType<remoteVals>) => returnVal
 ): Result<GetErrorType<remoteVals>, returnVal> =>
   // @ts-ignore
@@ -312,18 +303,6 @@ export const traverseAsyncF = <err, val, returnVal>(
  */
 export const mapManyAsyncF = <remoteVals extends any[], returnVal>(
   remoteArgs: remoteVals,
-  f: (...args: GetValueType<remoteVals>) => Promise<returnVal>
-): AsyncResult<GetErrorType<remoteVals>, returnVal> =>
-  // @ts-ignore
-  mapAsyncF(sequence(remoteArgs), args => f(...args))
-
-/** The same as remote.map but with an async function
- *
- *  t (Result err a) -> (t a -> Promise b) -> AsyncResult err b
- */
-export const mapManyAsyncF2 = <remoteVals extends any[], returnVal>(
-  ...remoteArgs: remoteVals
-) => (
   f: (...args: GetValueType<remoteVals>) => Promise<returnVal>
 ): AsyncResult<GetErrorType<remoteVals>, returnVal> =>
   // @ts-ignore
