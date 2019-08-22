@@ -174,7 +174,7 @@ export const fromGuarded = <err, val>(
   testedValue: unknown,
   errorMessage: err,
   validator: (testedValue: unknown) => testedValue is val
-) => (validator(testedValue) ? Ok(testedValue) : Err(errorMessage))
+): Result<err, val> => (validator(testedValue) ? Ok(testedValue) : Err(errorMessage))
 
 /** Helper function to determine if a Result is a success */
 export const isOk = <err, val>(result: Result<err, val>): result is IOk<val> =>
