@@ -65,7 +65,7 @@ type GetValueType<T> = T extends ResultList<any, infer vals> ? vals : never
  *
  *  t (Result err a) -> (t a -> b) -> Result err b
  */
-export const mapMany = <remoteVals extends [], returnVal>(
+export const mapMany = <remoteVals extends any[], returnVal>(
   remoteArgs: remoteVals,
   f: (...args: GetValueType<remoteVals>) => returnVal
 ): Result<GetErrorType<remoteVals>, returnVal> =>
@@ -332,7 +332,7 @@ export const traverseAsyncF = <err, val, returnVal>(
  *
  *  t (Result err a) -> (t a -> Promise b) -> AsyncResult err b
  */
-export const mapManyAsyncF = <remoteVals extends [], returnVal>(
+export const mapManyAsyncF = <remoteVals extends any[], returnVal>(
   remoteArgs: remoteVals,
   f: (...args: GetValueType<remoteVals>) => Promise<returnVal>
 ): AsyncResult<GetErrorType<remoteVals>, returnVal> =>
