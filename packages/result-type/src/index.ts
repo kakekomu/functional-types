@@ -54,10 +54,6 @@ export const map = <err, val, returnVal>(
 ): Result<err, returnVal> =>
   result.type === "Ok" ? Ok(f(result.value)) : result
 
-type GetErrorType<T> = T extends ResultList<infer err, any[]> ? err : never
-
-type GetValueType<T> = T extends ResultList<any, infer vals> ? vals : never
-
 /** Map a function f over a tuple of Result values.
  *  If and only if all the Result values are successes, this function will
  *  return a new Result with its wrapped value applied to f.
@@ -65,12 +61,65 @@ type GetValueType<T> = T extends ResultList<any, infer vals> ? vals : never
  *
  *  t (Result err a) -> (t a -> b) -> Result err b
  */
-export const mapMany = <remoteVals extends any[], returnVal>(
-  remoteArgs: remoteVals,
-  f: (...args: GetValueType<remoteVals>) => returnVal
-): Result<GetErrorType<remoteVals>, returnVal> =>
-  // @ts-ignore
-  map(sequence(remoteArgs), args => f(...args))
+export function mapMany<
+  err,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  returnVal
+>(
+  remoteArgs: ResultList<err, [T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]>,
+  f: (args: [T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) => returnVal
+): Result<err, returnVal>
+export function mapMany<err, T1, T2, T3, T4, T5, T6, T7, T8, T9, returnVal>(
+  remoteArgs: ResultList<err, [T1, T2, T3, T4, T5, T6, T7, T8, T9]>,
+  f: (args: [T1, T2, T3, T4, T5, T6, T7, T8, T9]) => returnVal
+): Result<err, returnVal>
+export function mapMany<err, T1, T2, T3, T4, T5, T6, T7, T8, returnVal>(
+  remoteArgs: ResultList<err, [T1, T2, T3, T4, T5, T6, T7, T8]>,
+  f: (args: [T1, T2, T3, T4, T5, T6, T7, T8]) => returnVal
+): Result<err, returnVal>
+export function mapMany<err, T1, T2, T3, T4, T5, T6, T7, returnVal>(
+  remoteArgs: ResultList<err, [T1, T2, T3, T4, T5, T6, T7]>,
+  f: (args: [T1, T2, T3, T4, T5, T6, T7]) => returnVal
+): Result<err, returnVal>
+export function mapMany<err, T1, T2, T3, T4, T5, T6, returnVal>(
+  remoteArgs: ResultList<err, [T1, T2, T3, T4, T5, T6]>,
+  f: (args: [T1, T2, T3, T4, T5, T6]) => returnVal
+): Result<err, returnVal>
+export function mapMany<err, T1, T2, T3, T4, T5, returnVal>(
+  remoteArgs: ResultList<err, [T1, T2, T3, T4, T5]>,
+  f: (args: [T1, T2, T3, T4, T5]) => returnVal
+): Result<err, returnVal>
+export function mapMany<err, T1, T2, T3, T4, returnVal>(
+  remoteArgs: ResultList<err, [T1, T2, T3, T4]>,
+  f: (args: [T1, T2, T3, T4]) => returnVal
+): Result<err, returnVal>
+export function mapMany<err, T1, T2, T3, returnVal>(
+  remoteArgs: ResultList<err, [T1, T2, T3]>,
+  f: (args: [T1, T2, T3]) => returnVal
+): Result<err, returnVal>
+export function mapMany<err, T1, T2, returnVal>(
+  remoteArgs: ResultList<err, [T1, T2]>,
+  f: (args: [T1, T2]) => returnVal
+): Result<err, returnVal>
+export function mapMany<err, T, returnVal>(
+  remoteArgs: Array<Result<err, T>>,
+  f: (...args: T[]) => returnVal
+): Result<err, returnVal>
+export function mapMany<err, T, returnVal>(
+  remoteArgs: Array<Result<err, T>>,
+  f: (...args: T[]) => returnVal
+): Result<err, returnVal> {
+  return map(sequence(remoteArgs), args => f(...args))
+}
 
 /** Map a function f over a Result error.
  *  If and only if the Result value is a failure, this function will
@@ -102,10 +151,40 @@ export const mapBoth = <err, val, newerr, newval>(
     : result
 
 /** List (Result err a) -> Result err (List a) */
-export const sequence = <err, val>(
-  resultList: Array<Result<err, val>>
-): Result<err, val[]> =>
-  resultList.reduce(
+export function sequence<err, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+  resultList: ResultList<err, [T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]>
+): Result<err, [T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]>
+export function sequence<err, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+  resultList: ResultList<err, [T1, T2, T3, T4, T5, T6, T7, T8, T9]>
+): Result<err, [T1, T2, T3, T4, T5, T6, T7, T8, T9]>
+export function sequence<err, T1, T2, T3, T4, T5, T6, T7, T8>(
+  resultList: ResultList<err, [T1, T2, T3, T4, T5, T6, T7, T8]>
+): Result<err, [T1, T2, T3, T4, T5, T6, T7, T8]>
+export function sequence<err, T1, T2, T3, T4, T5, T6, T7>(
+  resultList: ResultList<err, [T1, T2, T3, T4, T5, T6, T7]>
+): Result<err, [T1, T2, T3, T4, T5, T6, T7]>
+export function sequence<err, T1, T2, T3, T4, T5, T6>(
+  resultList: ResultList<err, [T1, T2, T3, T4, T5, T6]>
+): Result<err, [T1, T2, T3, T4, T5, T6]>
+export function sequence<err, T1, T2, T3, T4, T5>(
+  resultList: ResultList<err, [T1, T2, T3, T4, T5]>
+): Result<err, [T1, T2, T3, T4, T5]>
+export function sequence<err, T1, T2, T3, T4>(
+  resultList: ResultList<err, [T1, T2, T3, T4]>
+): Result<err, [T1, T2, T3, T4]>
+export function sequence<err, T1, T2, T3>(
+  resultList: ResultList<err, [T1, T2, T3]>
+): Result<err, [T1, T2, T3]>
+export function sequence<err, T1, T2>(
+  resultList: ResultList<err, [T1, T2]>
+): Result<err, [T1, T2]>
+export function sequence<err, T>(
+  resultList: Array<Result<err, T>>
+): Result<err, T[]>
+export function sequence<err, T>(
+  resultList: Array<Result<err, T>>
+): Result<err, T[]> {
+  return resultList.reduce(
     (prev, current) =>
       prev.type === "Ok" && current.type === "Ok"
         ? Ok([...prev.value, current.value])
@@ -114,6 +193,7 @@ export const sequence = <err, val>(
         : prev,
     Ok([])
   )
+}
 
 /** List a -> (a -> Result err a) -> Result err (List a) */
 export const traverse = <err, val, returnVal>(
@@ -301,9 +381,57 @@ export const traverseAsyncF = <err, val, returnVal>(
  *
  *  t (Result err a) -> (t a -> Promise b) -> AsyncResult err b
  */
-export const mapManyAsyncF = <remoteVals extends any[], returnVal>(
-  remoteArgs: remoteVals,
-  f: (...args: GetValueType<remoteVals>) => Promise<returnVal>
-): AsyncResult<GetErrorType<remoteVals>, returnVal> =>
-  // @ts-ignore
-  mapAsyncF(sequence(remoteArgs), args => f(...args))
+export function mapManyAsyncF<
+  err,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  returnVal
+>(
+  remoteArgs: ResultList<err, [T1, T2, T3, T4, T5, T6, T7, T8, T9]>,
+  f: (args: [T1, T2, T3, T4, T5, T6, T7, T8, T9]) => returnVal
+): AsyncResult<err, returnVal>
+export function mapManyAsyncF<err, T1, T2, T3, T4, T5, T6, T7, T8, returnVal>(
+  remoteArgs: ResultList<err, [T1, T2, T3, T4, T5, T6, T7, T8]>,
+  f: (args: [T1, T2, T3, T4, T5, T6, T7, T8]) => returnVal
+): AsyncResult<err, returnVal>
+export function mapManyAsyncF<err, T1, T2, T3, T4, T5, T6, T7, returnVal>(
+  remoteArgs: ResultList<err, [T1, T2, T3, T4, T5, T6, T7]>,
+  f: (args: [T1, T2, T3, T4, T5, T6, T7]) => returnVal
+): AsyncResult<err, returnVal>
+export function mapManyAsyncF<err, T1, T2, T3, T4, T5, T6, returnVal>(
+  remoteArgs: ResultList<err, [T1, T2, T3, T4, T5, T6]>,
+  f: (args: [T1, T2, T3, T4, T5, T6]) => returnVal
+): AsyncResult<err, returnVal>
+export function mapManyAsyncF<err, T1, T2, T3, T4, T5, returnVal>(
+  remoteArgs: ResultList<err, [T1, T2, T3, T4, T5]>,
+  f: (args: [T1, T2, T3, T4, T5]) => returnVal
+): AsyncResult<err, returnVal>
+export function mapManyAsyncF<err, T1, T2, T3, T4, returnVal>(
+  remoteArgs: ResultList<err, [T1, T2, T3, T4]>,
+  f: (args: [T1, T2, T3, T4]) => returnVal
+): AsyncResult<err, returnVal>
+export function mapManyAsyncF<err, T1, T2, T3, returnVal>(
+  remoteArgs: ResultList<err, [T1, T2, T3]>,
+  f: (args: [T1, T2, T3]) => returnVal
+): AsyncResult<err, returnVal>
+export function mapManyAsyncF<err, T1, T2, returnVal>(
+  remoteArgs: ResultList<err, [T1, T2]>,
+  f: (args: [T1, T2]) => returnVal
+): AsyncResult<err, returnVal>
+export function mapManyAsyncF<err, T, returnVal>(
+  remoteArgs: Array<Result<err, T>>,
+  f: (...args: T[]) => returnVal
+): AsyncResult<err, returnVal>
+export function mapManyAsyncF<err, T, returnVal>(
+  remoteArgs: Array<Result<err, T>>,
+  f: (...args: T[]) => Promise<returnVal>
+): AsyncResult<err, returnVal> {
+  return mapAsyncF(sequence(remoteArgs), args => f(...args))
+}
