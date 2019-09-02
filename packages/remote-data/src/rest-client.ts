@@ -15,14 +15,24 @@ type HTTPMethod = "get" | "post" | "put" | "patch" | "delete"
 export type WebData<T> = RemoteData<AxiosError, T>
 export type AsyncWebData<T> = AsyncRemoteData<AxiosError, T>
 
-export const request = (method: HTTPMethod) => <T, D = undefined>(
-  url: string,
+export interface IOptionals<D, H> {
   data?: D
+  headers?: H
+}
+
+export const request = (method: HTTPMethod) => <
+  T,
+  D = undefined,
+  H = undefined
+>(
+  url: string,
+  optionals: IOptionals<D, H> = {}
 ): AsyncWebData<T> =>
   axios({
-    data,
     method,
-    url
+    url,
+    data: optionals.data,
+    headers: optionals.headers
   })
     .then((response: AxiosResponse<T>) => Success<AxiosError, T>(response.data))
     .catch((error: AxiosError) => Failure<AxiosError, T>(error))
