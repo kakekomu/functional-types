@@ -39,7 +39,9 @@ const MappingsExample: FunctionComponent = () => {
     const responses = await Promise.all([
       remote.get<IGreetingResp>("http://httpbin.org/get?greeting=Hello"),
       remote.post<INameResp, INameParams>("http://httpbin.org/post", {
-        name: nameInput
+        data: {
+          name: nameInput
+        }
       }),
       remote.get<IUUIDResp>("https://httpbin.org/uuid")
     ])
