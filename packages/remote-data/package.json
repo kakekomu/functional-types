@@ -1,6 +1,6 @@
 {
   "name": "@kakekomu/remote-data",
-  "version": "1.2.0-alpha.13",
+  "version": "1.2.0-alpha.14",
   "description": "",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/kakekomu/remote-data#readme",
   "dependencies": {
-    "@kakekomu/result-type": "^1.2.0-alpha.12"
+    "@kakekomu/result-type": "^1.2.0-alpha.14"
   },
   "peerDependencies": {
     "axios": "^0.19.0",
