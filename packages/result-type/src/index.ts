@@ -26,7 +26,7 @@ export const Ok = <err, val>(value: val): Result<err, val> => ({
   value
 })
 
-/** Type representing a remote data in a Promise. */
+/** Type representing a result data in a Promise. */
 export type AsyncResult<err, val> = Promise<Result<err, val>>
 
 export type UnResult<T> = T extends { type: "Ok"; value: infer V } ? V : never
@@ -86,7 +86,7 @@ export const mapErr = <err, val, newerr>(
   result.type === "Err" ? Err(f(result.error)) : result
 
 /** Map two functions fErr and fVal for Err and Ok cases respectively.
- *  Same as remote.mapErr(remote.map(result, fVal), fErr)
+ *  Same as result.mapErr(result.map(result, fVal), fErr)
  *
  *  Result err val -> (err -> errB) -> (val -> valB) -> Result errB valB
  */
@@ -227,7 +227,7 @@ export const isErr = <err, val>(
 
 // ASYNC HELPERS
 
-/** The same as remote.map but with an AsyncResult value
+/** The same as result.map but with an AsyncResult value
  *
  *  AsyncResult err a -> (a -> b) -> AsyncResult err b
  */
@@ -236,7 +236,7 @@ export const mapAsync = <err, val, returnVal>(
   f: (value: val) => returnVal
 ): AsyncResult<err, returnVal> => asyncResult.then(result => map(result, f))
 
-/** The same as remote.map but with an async function
+/** The same as result.map but with an async function
  *
  *  Result err a -> (a -> Promise b) -> AsyncResult err b
  */
@@ -248,7 +248,7 @@ export const mapAsyncF = <err, val, returnVal>(
     ? f(result.value).then(asyncResult => Ok(asyncResult))
     : new Promise(resolve => resolve(result))
 
-/** The same as remote.mapFailure but with an AsyncResult value
+/** The same as result.mapFailure but with an AsyncResult value
  *
  *  AsyncResult err a -> (err -> errB) -> AsyncResult errB a
  */
@@ -257,7 +257,7 @@ export const mapErrAsync = <err, val, newerr>(
   f: (error: err) => newerr
 ): AsyncResult<newerr, val> => asyncResult.then(result => mapErr(result, f))
 
-/** The same as remote.mapBoth but with an AsyncResult value
+/** The same as result.mapBoth but with an AsyncResult value
  *
  *  AsyncResult err val -> (err -> errB) -> (val -> valB) -> AsyncResult errB valB
  */
@@ -274,7 +274,7 @@ export const sequenceAsync = <err, val>(
 ): AsyncResult<err, val[]> =>
   Promise.all(asyncResultList).then(resultList => sequence(resultList))
 
-/** The same as remote.andThen but with an AsyncResult value
+/** The same as result.andThen but with an AsyncResult value
  *
  *  AsyncResult err a -> (a -> AsyncResult err b) -> AsyncResult err b
  */
@@ -283,7 +283,7 @@ export const andThenAsync = <err, val, returnVal>(
   f: (value: val) => Result<err, returnVal>
 ): AsyncResult<err, returnVal> => asyncResult.then(result => andThen(result, f))
 
-/** The same as remote.andThen but with an async function
+/** The same as result.andThen but with an async function
  *
  *  AsyncResult err a -> (a -> AsyncResult err b) -> AsyncResult err b
  */
@@ -295,7 +295,7 @@ export const andThenAsyncF = <err, val, returnVal>(
     ? f(result.value)
     : new Promise(resolve => resolve(result))
 
-/** The same as remote.andThen but with an async function
+/** The same as result.andThen but with an async function
  *
  *  AsyncResult err a -> (a -> AsyncResult err b) -> AsyncResult err b
  */
@@ -309,7 +309,7 @@ export const andThenAsyncRF = <err, val, returnVal>(
       : new Promise(resolve => resolve(result))
   )
 
-/** The same as remote.ap but with an AsyncResult value
+/** The same as result.ap but with an AsyncResult value
  *
  *  AsyncResult err a -> AsyncResult err (a -> b) -> AsyncResult err b
  */
@@ -328,7 +328,7 @@ export const traverseAsyncF = <err, val, returnVal>(
 ): AsyncResult<err, returnVal[]> =>
   sequenceAsync(valueList.map(value => f(value)))
 
-/** The same as remote.map but with an async function
+/** The same as result.map but with an async function
  *
  *  t (Result err a) -> (t a -> Promise b) -> AsyncResult err b
  */

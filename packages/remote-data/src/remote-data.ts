@@ -121,10 +121,40 @@ export const mapBoth = <err, val, newerr, newval>(
     : remoteData
 
 /** List (RemoteData err a) -> RemoteData err (List a) */
-export const sequence = <err, val>(
-  remoteDataList: Array<RemoteData<err, val>>
-): RemoteData<err, val[]> =>
-  remoteDataList.reduce(
+export function sequence<err, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+  resultList: RemoteDataList<err, [T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]>
+): RemoteData<err, [T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]>
+export function sequence<err, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+  resultList: RemoteDataList<err, [T1, T2, T3, T4, T5, T6, T7, T8, T9]>
+): RemoteData<err, [T1, T2, T3, T4, T5, T6, T7, T8, T9]>
+export function sequence<err, T1, T2, T3, T4, T5, T6, T7, T8>(
+  resultList: RemoteDataList<err, [T1, T2, T3, T4, T5, T6, T7, T8]>
+): RemoteData<err, [T1, T2, T3, T4, T5, T6, T7, T8]>
+export function sequence<err, T1, T2, T3, T4, T5, T6, T7>(
+  resultList: RemoteDataList<err, [T1, T2, T3, T4, T5, T6, T7]>
+): RemoteData<err, [T1, T2, T3, T4, T5, T6, T7]>
+export function sequence<err, T1, T2, T3, T4, T5, T6>(
+  resultList: RemoteDataList<err, [T1, T2, T3, T4, T5, T6]>
+): RemoteData<err, [T1, T2, T3, T4, T5, T6]>
+export function sequence<err, T1, T2, T3, T4, T5>(
+  resultList: RemoteDataList<err, [T1, T2, T3, T4, T5]>
+): RemoteData<err, [T1, T2, T3, T4, T5]>
+export function sequence<err, T1, T2, T3, T4>(
+  resultList: RemoteDataList<err, [T1, T2, T3, T4]>
+): RemoteData<err, [T1, T2, T3, T4]>
+export function sequence<err, T1, T2, T3>(
+  resultList: RemoteDataList<err, [T1, T2, T3]>
+): RemoteData<err, [T1, T2, T3]>
+export function sequence<err, T1, T2>(
+  resultList: RemoteDataList<err, [T1, T2]>
+): RemoteData<err, [T1, T2]>
+export function sequence<err, T>(
+  resultList: Array<RemoteData<err, T>>
+): RemoteData<err, T[]>
+export function sequence<err, T>(
+  resultList: Array<RemoteData<err, T>>
+): RemoteData<err, T[]> {
+  return resultList.reduce(
     (prev, current) =>
       prev.type === "Success" && current.type === "Success"
         ? Success([...prev.value, current.value])
@@ -133,6 +163,7 @@ export const sequence = <err, val>(
         : prev,
     Success([])
   )
+}
 
 /** List a -> (a -> RemoteData err a) -> RemoteData err (List a) */
 export const traverse = <err, val, returnVal>(
@@ -252,6 +283,18 @@ export const mapAsync = <err, val, returnVal>(
   f: (value: val) => returnVal
 ): AsyncRemoteData<err, returnVal> =>
   asyncRemoteData.then(remoteData => map(remoteData, f))
+
+/** The same as remote.map but with an async function
+ *
+ *  Result err a -> (a -> Promise b) -> AsyncResult err b
+ */
+export const mapAsyncF = <err, val, returnVal>(
+  remote: RemoteData<err, val>,
+  f: (value: val) => Promise<returnVal>
+): AsyncRemoteData<err, returnVal> =>
+  remote.type === "Success"
+    ? f(remote.value).then(asyncResult => Success(asyncResult))
+    : new Promise(resolve => resolve(remote))
 
 /** The same as remote.mapFailure but with an AsyncRemoteData value
  *
