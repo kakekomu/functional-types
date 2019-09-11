@@ -227,6 +227,18 @@ export const fromNullable = <err, val>(
     ? Success(testedValue)
     : Failure(errorMessage)
 
+/** Creates a RemoteData value based on the return of a TypeScript guard.
+ *  It will return a Failure if the input value is null or undefined.
+ *
+ *  unknown -> err -> (unknown -> boolean) -> RemoteData err a
+ */
+export const fromGuarded = <err, val>(
+  testedValue: unknown,
+  errorMessage: err,
+  validator: (testedValue: unknown) => testedValue is val
+): RemoteData<err, val> =>
+  validator(testedValue) ? Success(testedValue) : Failure(errorMessage)
+
 /** Helper function to determine if a RemoteData is a success */
 export const isNotAsked = <err, val>(
   remoteData: RemoteData<err, val>
@@ -334,6 +346,18 @@ export const andThenAsync = <err, val, returnVal>(
   f: (value: val) => RemoteData<err, returnVal>
 ): AsyncRemoteData<err, returnVal> =>
   asyncRemoteData.then(remoteData => andThen(remoteData, f))
+
+/** The same as result.andThen but with an async function
+ *
+ *  AsyncResult err a -> (a -> AsyncResult err b) -> AsyncResult err b
+ */
+export const andThenAsyncF = <err, val, returnVal>(
+  remote: RemoteData<err, val>,
+  f: (value: val) => AsyncRemoteData<err, returnVal>
+): AsyncRemoteData<err, returnVal> =>
+  remote.type === "Success"
+    ? f(remote.value)
+    : new Promise(resolve => resolve(remote))
 
 /** The same as remote.ap but with an AsyncRemoteData value
  *
