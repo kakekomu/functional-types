@@ -12,12 +12,28 @@ import {
 
 type HTTPMethod = "get" | "post" | "put" | "patch" | "delete"
 
-export type WebData<T> = RemoteData<AxiosError, T>
-export type AsyncWebData<T> = AsyncRemoteData<AxiosError, T>
+export type WebData<T> = RemoteData<string, T>
+export type AsyncWebData<T> = AsyncRemoteData<string, T>
 
 export interface IOptionals<D, H> {
   data?: D
   headers?: H
+}
+
+export const errorToString = (
+  url: string,
+  method: string,
+  error: AxiosError
+): string => {
+  const errorMsg =
+    (error.response &&
+      error.response.data &&
+      error.response.data.error &&
+      error.response.data.error.message) ||
+    error.message ||
+    "Request error."
+
+  return `${method.toUpperCase()} ${url} failed: ${errorMsg}`
 }
 
 export const request = (method: HTTPMethod) => <
@@ -34,8 +50,10 @@ export const request = (method: HTTPMethod) => <
     data: optionals.data,
     headers: optionals.headers
   })
-    .then((response: AxiosResponse<T>) => Success<AxiosError, T>(response.data))
-    .catch((error: AxiosError) => Failure<AxiosError, T>(error))
+    .then((response: AxiosResponse<T>) => Success<string, T>(response.data))
+    .catch((error: AxiosError) =>
+      Failure<string, T>(errorToString(url, method, error))
+    )
 
 export const get = request("get")
 export const post = request("post")
@@ -46,7 +64,7 @@ export const del = request("delete")
 export const useRemoteData = <T>(
   requestF: () => AsyncWebData<T>
 ): [WebData<T>, () => void] => {
-  const [remoteData, setRemoteData] = useState(NotAsked<AxiosError, T>())
+  const [remoteData, setRemoteData] = useState(NotAsked<string, T>())
 
   const fetchRemoteData = () => {
     if (isNotAsked(remoteData)) {
