@@ -15,7 +15,7 @@ type HTTPMethod = "get" | "post" | "put" | "patch" | "delete"
 export type WebData<T> = RemoteData<string, T>
 export type AsyncWebData<T> = AsyncRemoteData<string, T>
 
-export interface IOptionals<D, H> {
+export interface Optionals<D, H> {
   data?: D
   headers?: H
 }
@@ -42,7 +42,7 @@ export const request = (method: HTTPMethod) => <
   H = undefined
 >(
   url: string,
-  optionals: IOptionals<D, H> = {}
+  optionals: Optionals<D, H> = {}
 ): AsyncWebData<T> =>
   axios({
     method,

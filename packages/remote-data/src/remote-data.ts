@@ -2,13 +2,13 @@ import * as result from "@kakekomu/result-type"
 // RemoteData type constructors
 
 export type RemoteData<err, val> =
-  | INotAsked
-  | ILoading
-  | IFailure<err>
-  | ISuccess<val>
+  | NotAsked
+  | Loading
+  | Failure<err>
+  | Success<val>
 
 /** Type representing a remote data. No request is made to fetch remote data. */
-export interface INotAsked {
+export interface NotAsked {
   readonly type: "NotAsked"
 }
 
@@ -18,7 +18,7 @@ export const NotAsked = <err, val>(): RemoteData<err, val> => ({
 })
 
 /** Type representing a remote data. Request is made to fetch remote data. */
-export interface ILoading {
+export interface Loading {
   readonly type: "Loading"
 }
 
@@ -28,7 +28,7 @@ export const Loading = <err, val>(): RemoteData<err, val> => ({
 })
 
 /** Type representing a remote data. Request to fetch failed. */
-export interface IFailure<err> {
+export interface Failure<err> {
   readonly type: "Failure"
   readonly error: err
 }
@@ -40,7 +40,7 @@ export const Failure = <err, val>(error: err): RemoteData<err, val> => ({
 })
 
 /** Type representing a remote data. Request to fetch succeeded. */
-export interface ISuccess<val> {
+export interface Success<val> {
   readonly type: "Success"
   readonly value: val
 }
@@ -242,22 +242,22 @@ export const fromGuarded = <err, val>(
 /** Helper function to determine if a RemoteData is a success */
 export const isNotAsked = <err, val>(
   remoteData: RemoteData<err, val>
-): remoteData is INotAsked => remoteData.type === "NotAsked"
+): remoteData is NotAsked => remoteData.type === "NotAsked"
 
 /** Helper function to determine if a RemoteData is a success */
 export const isLoading = <err, val>(
   remoteData: RemoteData<err, val>
-): remoteData is ILoading => remoteData.type === "Loading"
+): remoteData is Loading => remoteData.type === "Loading"
 
 /** Helper function to determine if a RemoteData is a success */
 export const isSuccess = <err, val>(
   remoteData: RemoteData<err, val>
-): remoteData is ISuccess<val> => remoteData.type === "Success"
+): remoteData is Success<val> => remoteData.type === "Success"
 
 /** Helper function to determine if a RemoteData is a failure */
 export const isFailure = <err, val>(
   remoteData: RemoteData<err, val>
-): remoteData is IFailure<err> => remoteData.type === "Failure"
+): remoteData is Failure<err> => remoteData.type === "Failure"
 
 /** Converts a RemoteData type to a Result type with a default error value
  *
@@ -367,6 +367,7 @@ export const apAsync = <err, val, returnVal>(
   asyncRemoteData: AsyncRemoteData<err, val>,
   asyncApplicativeF: AsyncRemoteData<err, (value: val) => returnVal>
 ): AsyncRemoteData<err, returnVal> =>
-  Promise.all([asyncRemoteData, asyncApplicativeF]).then(
-    ([remoteData, applicativeF]) => ap(remoteData, applicativeF)
-  )
+  Promise.all([
+    asyncRemoteData,
+    asyncApplicativeF
+  ]).then(([remoteData, applicativeF]) => ap(remoteData, applicativeF))
