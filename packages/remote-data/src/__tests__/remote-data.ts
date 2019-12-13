@@ -161,9 +161,12 @@ describe("Remote.ap", () => {
   })
 
   test("applying a Success value", () => {
-    expect(Remote.ap(Success(5), Success((num: number) => num + 5))).toEqual(
-      Success(10)
-    )
+    expect(
+      Remote.ap(
+        Success(5),
+        Success((num: number) => num + 5)
+      )
+    ).toEqual(Success(10))
   })
 })
 
