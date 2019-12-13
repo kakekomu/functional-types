@@ -1,9 +1,9 @@
 // Result type constructors
 
-export type Result<err, val> = IErr<err> | IOk<val>
+export type Result<err, val> = Err<err> | Ok<val>
 
 /** Type representing a failure with an error message. */
-export interface IErr<err> {
+export interface Err<err> {
   readonly type: "Err"
   readonly error: err
 }
@@ -15,7 +15,7 @@ export const Err = <err, val>(error: err): Result<err, val> => ({
 })
 
 /** Type representing a success. */
-export interface IOk<val> {
+export interface Ok<val> {
   readonly type: "Ok"
   readonly value: val
 }
@@ -217,13 +217,12 @@ export const fromGuarded = <err, val>(
   validator(testedValue) ? Ok(testedValue) : Err(errorMessage)
 
 /** Helper function to determine if a Result is a success */
-export const isOk = <err, val>(result: Result<err, val>): result is IOk<val> =>
+export const isOk = <err, val>(result: Result<err, val>): result is Ok<val> =>
   result.type === "Ok"
 
 /** Helper function to determine if a Result is a failure */
-export const isErr = <err, val>(
-  result: Result<err, val>
-): result is IErr<err> => result.type === "Err"
+export const isErr = <err, val>(result: Result<err, val>): result is Err<err> =>
+  result.type === "Err"
 
 // ASYNC HELPERS
 
