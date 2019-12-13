@@ -15,6 +15,7 @@
     "build": "lerna run build",
     "clean": "lerna run clean --parallel",
     "test": "jest",
+    "format": "prettier --write \"packages/**/*.ts\"",
     "start:examples": "yarn workspace examples start",
     "release": "lerna version",
     "release-ci": "lerna publish from-git --yes"
