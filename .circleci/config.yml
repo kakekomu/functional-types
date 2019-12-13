@@ -23,18 +23,19 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-{{ checksum "yarn.lock" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
       - run: yarn install
 
-      - run: yarn build
-
       - save_cache:
           paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+            - ~/.cache/yarn
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
+
+      - run: yarn build
+
       - persist_to_workspace:
           root: ~/project
           paths:
@@ -53,8 +54,8 @@ jobs:
       - *attach_workspace
       - checkout
 
-      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/project/.npmrc
-      - run: yarn publish --non-interactive
+      - run: npm set //registry.npmjs.org/:_authToken=$NPM_TOKEN
+      - run: yarn release-ci
 
 workflows:
   version: 2

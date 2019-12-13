@@ -1,0 +1,46 @@
+{
+  "name": "@kakekomu/remote-data",
+  "version": "1.2.0-alpha.16",
+  "description": "",
+  "main": "lib/index.js",
+  "module": "lib/index.es.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "jest",
+    "build": "rollup -c",
+    "watch": "rollup -cw",
+    "tsc": "tsc --module commonjs",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
+    "clean": "rm -rf ./lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kakekomu/remote-data.git"
+  },
+  "keywords": [],
+  "author": "Kakekomu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kakekomu/remote-data/issues"
+  },
+  "homepage": "https://github.com/kakekomu/remote-data#readme",
+  "dependencies": {
+    "@kakekomu/result-type": "^1.2.0-alpha.14"
+  },
+  "peerDependencies": {
+    "axios": "^0.19.0",
+    "react": "^16.8.0"
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.23",
+    "axios": "^0.19.0",
+    "react": "^16.8.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
