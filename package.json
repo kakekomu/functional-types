@@ -21,6 +21,18 @@
     "release": "lerna version",
     "release-ci": "lerna publish from-git --yes"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint 'packages/**/*.ts' --fix",
+      "prettier --parser typescript --write 'packages/**/*.ts'",
+      "git add --patch"
+    ]
+  },
   "keywords": [],
   "author": "Kakekomu",
   "license": "ISC",
@@ -40,5 +52,9 @@
     "rollup-plugin-typescript2": "^0.22.0",
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "husky": "^3.1.0",
+    "lint-staged": "^9.5.0"
   }
 }
