@@ -54,7 +54,10 @@ jobs:
       - *attach_workspace
       - checkout
 
-      - run: npm set //registry.npmjs.org/:_authToken=$NPM_TOKEN
+      - run: 
+          name: Authenticate with registry
+          command: echo "//npm.pkg.github.com/:_authToken=$GITHUB_TOKEN" > ~/.npmrc
+
       - run: yarn release-ci
 
 workflows:
