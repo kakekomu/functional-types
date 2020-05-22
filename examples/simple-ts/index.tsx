@@ -1,16 +1,15 @@
 import { Loading, NotAsked } from "@kakekomu/remote-data"
 import * as remote from "@kakekomu/remote-data"
-import { AxiosError } from "axios"
 import React, { FunctionComponent, useState } from "react"
 
-interface IResp {
+interface Resp {
   args: {
     greeting: string
   }
 }
 
 const SimpleTSExample: FunctionComponent = () => {
-  const [webData, setWebData] = useState(NotAsked<AxiosError<any>, string>())
+  const [webData, setWebData] = useState(NotAsked<string, string>())
 
   const fetchGreeting = () => {
     // Setting the webData to Loading before starting the request
@@ -20,7 +19,7 @@ const SimpleTSExample: FunctionComponent = () => {
     // It makes an HTTP get request, and returns a Failure with the error message or a
     // Success with the response object.
     remote
-      .get<IResp>("http://httpbin.org/get?greeting=Hello%20World")
+      .get<Resp>("http://httpbin.org/get?greeting=Hello%20World")
       .then(resp => {
         // We could simply set the webData to the response, or do some mapping on it.
         // This time we take the greeting out of the response body.

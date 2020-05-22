@@ -61,15 +61,15 @@ export const patch = request("patch")
 export const put = request("put")
 export const del = request("delete")
 
-export const useRemoteData = <T>(
-  requestF: () => AsyncWebData<T>
-): [WebData<T>, () => void] => {
+export const useRemoteData = <T, A>(
+  requestF: (...reqArgs: A[]) => AsyncWebData<T>
+): [WebData<T>, (...reqArgs: A[]) => void] => {
   const [remoteData, setRemoteData] = useState(NotAsked<string, T>())
 
-  const fetchRemoteData = () => {
+  const fetchRemoteData = (...args: A[]) => {
     if (isNotAsked(remoteData)) {
       setRemoteData(Loading())
-      requestF().then(setRemoteData)
+      requestF(...args).then(setRemoteData)
     }
   }
 
