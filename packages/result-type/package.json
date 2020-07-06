@@ -27,7 +27,6 @@
   },
   "homepage": "https://github.com/kakekomu/remote-data#readme",
   "publishConfig": {
-    "access": "public",
-    "registry": "https://npm.pkg.github.com/"
+    "access": "public"
   }
 }

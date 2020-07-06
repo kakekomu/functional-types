@@ -7,7 +7,7 @@ version: 2
 defaults: &defaults
   docker:
     - image: circleci/node:10.16
-  working_directory: ~/project/remote-data
+  working_directory: ~/project/functional-types
 
 attach_workspace: &attach_workspace
   attach_workspace:
@@ -39,7 +39,7 @@ jobs:
       - persist_to_workspace:
           root: ~/project
           paths:
-            - remote-data
+            - functional-types
 
   test:
     <<: *defaults
@@ -47,18 +47,27 @@ jobs:
       - *attach_workspace
       - run: yarn test
 
-  publish:
+  github_publish:
     <<: *defaults
 
     steps:
       - *attach_workspace
       - checkout
 
-      - run: 
+      - run:
           name: Authenticate with registry
           command: echo "//npm.pkg.github.com/:_authToken=$GITHUB_TOKEN" > ~/.npmrc
 
-      - run: yarn release-ci
+      - run: yarn release-github
+
+  npm_publish:
+    <<: *defaults
+
+    steps:
+      - *attach_workspace
+      - checkout
+
+      - run: yarn release-npm
 
 workflows:
   version: 2
@@ -74,11 +83,19 @@ workflows:
           filters:
             tags:
               only: /^v.*/
-      - publish:
+      - github_publish:
           requires:
             - test
           filters:
             tags:
               only: /^v.*/
+            branches:
+              ignore: /.*/
+      - github_publish:
+          requires:
+            - test
+          filters:
+            tags:
+              only: /^v.\d+\.\d+\.\d+\.$/
             branches:
               ignore: /.*/
