@@ -19,7 +19,8 @@
     "lint": "eslint 'packages/**/*.ts'",
     "start:examples": "yarn workspace examples start",
     "release": "lerna version",
-    "release-ci": "lerna publish from-package --yes --registry https://npm.pkg.github.com/"
+    "publish:github": "lerna publish from-package --yes --registry https://npm.pkg.github.com/",
+    "publish:npm": "lerna publish from-package --yes --registry https://registry.npmjs.org/"
   },
   "husky": {
     "hooks": {
