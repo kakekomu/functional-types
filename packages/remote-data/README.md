@@ -13,14 +13,8 @@ type RemoteData<err, val> = NotAsked | Loading | Failure<err> | Success<val>
 This means you will not need to handle the request state with booleans like `isFetching` or `isFailed`,
 resulting in a much safer and concise code.
 
-Under the hood, these four types are simple objects with a `type` field. You will need to do a
-`switch` or `if` statement in order to get the wrapped value (see the example below).
-
-### Main concerns
-
-- usable with Next.js (to be able to use inside the getInitialProps method, it needs to be serializable)
-- type safety
-- Elm-like functional API
+Under the hood, these four types are simple objects with a `type` field. You can use a
+`switch` or `if` statement to get the wrapped value (see the example below).
 
 # Example use case
 
@@ -91,16 +85,7 @@ remote.get<Resp>(`http://httpbin.org/get?greeting=HelloWorld`)
 
 This will give you a `AsyncRemoteData<string, Resp>` which is the same as `Promise<RemoteData<string, Resp>>`
 
-# Examples
-
-You can find some simple example applications in the [examples](https://github.com/kakekomu/remote-data/tree/master/examples) folder.
-
-### Starting the examples
-
-- Install dependencies with `npm install`
-- Bootstrap monorepo `npm run bootstrap`
-- Build the remote-data library with `npm run build`
-- Start the bundler with `npm run start:examples`
+You can find some simple example applications in the [examples](https://github.com/kakekomu/functional-types/tree/master/examples) folder.
 
 # Helper functions
 
