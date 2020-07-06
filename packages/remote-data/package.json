@@ -17,15 +17,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kakekomu/remote-data.git"
+    "url": "git+https://github.com/kakekomu/functional-types.git"
   },
   "keywords": [],
   "author": "Kakekomu",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kakekomu/remote-data/issues"
+    "url": "https://github.com/kakekomu/functional-types/issues"
   },
-  "homepage": "https://github.com/kakekomu/remote-data#readme",
+  "homepage": "https://github.com/kakekomu/functional-types/tree/master/packages/remote-data#readme",
   "dependencies": {
     "@kakekomu/result-type": "^1.2.0-alpha.22"
   },
@@ -39,7 +39,6 @@
     "react": "^16.8.0"
   },
   "publishConfig": {
-    "access": "public",
-    "registry": "https://npm.pkg.github.com/"
+    "access": "public"
   }
 }
