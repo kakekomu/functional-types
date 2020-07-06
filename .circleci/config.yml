@@ -91,7 +91,7 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
-      - github_publish:
+      - npm_publish:
           requires:
             - test
           filters:
