@@ -8,7 +8,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kakekomu/remote-data.git"
+    "url": "git+https://github.com/kakekomu/functional-types.git"
   },
   "scripts": {
     "bootstrap": "lerna bootstrap --use-workspaces",
@@ -19,7 +19,8 @@
     "lint": "eslint 'packages/**/*.ts'",
     "start:examples": "yarn workspace examples start",
     "release": "lerna version",
-    "release-ci": "lerna publish from-git --yes"
+    "publish:github": "lerna publish from-package --yes --registry https://npm.pkg.github.com/",
+    "publish:npm": "lerna publish from-package --yes --registry https://registry.npmjs.org/"
   },
   "husky": {
     "hooks": {
@@ -37,9 +38,9 @@
   "author": "Kakekomu",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kakekomu/remote-data/issues"
+    "url": "https://github.com/kakekomu/functional-types/issues"
   },
-  "homepage": "https://github.com/kakekomu/remote-data#readme",
+  "homepage": "https://github.com/kakekomu/functional-types#readme",
   "devDependencies": {
     "@types/jest": "^24.0.23",
     "@typescript-eslint/eslint-plugin": "^2.11.0",

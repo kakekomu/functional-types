@@ -1,7 +1,7 @@
 import * as remote from "@kakekomu/remote-data"
 import React, { FunctionComponent } from "react"
 
-interface IResp {
+interface Resp {
   args: {
     greeting: string
   }
@@ -10,9 +10,15 @@ interface IResp {
 const ReactHooksExample: FunctionComponent = () => {
   // The useRemoteData hook takes care of the whole lifecycle.
   // The fetchRemoteData will trigger the request.
-  const [webData, fetchRemoteData] = remote.useRemoteData(() =>
+  const [
+    webData,
+    fetchRemoteData
+  ] = remote.useRemoteData((name: string, exclMarkNum: number) =>
     remote.mapAsync(
-      remote.get<IResp>("http://httpbin.org/get?greeting=Hello%20World"),
+      remote.get<Resp>(
+        `http://httpbin.org/get?greeting=Hello%20${name +
+          "!".repeat(exclMarkNum)}`
+      ),
       resBody => resBody.args.greeting
     )
   )
@@ -20,7 +26,9 @@ const ReactHooksExample: FunctionComponent = () => {
   // We can switch the rendered HTML based on the state of our webData
   switch (webData.type) {
     case "NotAsked": {
-      return <button onClick={fetchRemoteData}>Fetch</button>
+      return (
+        <button onClick={() => fetchRemoteData("Visitor", 3)}>Fetch</button>
+      )
     }
     case "Loading": {
       return <div>Loading...</div>

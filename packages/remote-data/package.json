@@ -1,6 +1,6 @@
 {
   "name": "@kakekomu/remote-data",
-  "version": "1.2.0-alpha.16",
+  "version": "1.2.0-alpha.23",
   "description": "",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
@@ -17,17 +17,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kakekomu/remote-data.git"
+    "url": "git+https://github.com/kakekomu/functional-types.git"
   },
   "keywords": [],
   "author": "Kakekomu",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kakekomu/remote-data/issues"
+    "url": "https://github.com/kakekomu/functional-types/issues"
   },
-  "homepage": "https://github.com/kakekomu/remote-data#readme",
+  "homepage": "https://github.com/kakekomu/functional-types/tree/master/packages/remote-data#readme",
   "dependencies": {
-    "@kakekomu/result-type": "^1.2.0-alpha.14"
+    "@kakekomu/result-type": "^1.2.0-alpha.23"
   },
   "peerDependencies": {
     "axios": "^0.19.0",

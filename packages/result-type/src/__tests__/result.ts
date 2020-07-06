@@ -136,7 +136,12 @@ describe("Result.ap", () => {
   })
 
   test("applying a Ok value", () => {
-    expect(Result.ap(Ok(5), Ok((num: number) => num + 5))).toEqual(Ok(10))
+    expect(
+      Result.ap(
+        Ok(5),
+        Ok((num: number) => num + 5)
+      )
+    ).toEqual(Ok(10))
   })
 })
 

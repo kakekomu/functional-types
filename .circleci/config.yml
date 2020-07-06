@@ -47,15 +47,27 @@ jobs:
       - *attach_workspace
       - run: yarn test
 
-  publish:
+  publish_github:
     <<: *defaults
 
     steps:
       - *attach_workspace
       - checkout
 
-      - run: npm set //registry.npmjs.org/:_authToken=$NPM_TOKEN
-      - run: yarn release-ci
+      - run:
+          name: Authenticate with registry
+          command: echo "//npm.pkg.github.com/:_authToken=$GITHUB_TOKEN" > ~/.npmrc
+
+      - run: yarn publish:github
+
+  publish_npm:
+    <<: *defaults
+
+    steps:
+      - *attach_workspace
+      - checkout
+
+      - run: yarn publish:npm
 
 workflows:
   version: 2
@@ -71,11 +83,19 @@ workflows:
           filters:
             tags:
               only: /^v.*/
-      - publish:
+      - publish_github:
           requires:
             - test
           filters:
             tags:
               only: /^v.*/
+            branches:
+              ignore: /.*/
+      - publish_npm:
+          requires:
+            - test
+          filters:
+            tags:
+              only: /^v.\d+\.\d+\.\d+\.$/
             branches:
               ignore: /.*/
