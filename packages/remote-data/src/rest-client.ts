@@ -12,48 +12,33 @@ import {
 
 type HTTPMethod = "get" | "post" | "put" | "patch" | "delete"
 
-export type WebData<T> = RemoteData<string, T>
-export type AsyncWebData<T> = AsyncRemoteData<string, T>
+export type WebData<T, E = unknown> = RemoteData<AxiosError<E>, T>
+export type AsyncWebData<T, E = unknown> = AsyncRemoteData<AxiosError<E>, T>
 
 export interface Optionals<D, H> {
   data?: D
   headers?: H
 }
 
-export const errorToString = (
-  url: string,
-  method: string,
-  error: AxiosError
-): string => {
-  const errorMsg =
-    (error.response &&
-      error.response.data &&
-      error.response.data.error &&
-      error.response.data.error.message) ||
-    error.message ||
-    "Request error."
-
-  return `${method.toUpperCase()} ${url} failed: ${errorMsg}`
-}
-
 export const request = (method: HTTPMethod) => <
   T,
   D = undefined,
-  H = undefined
+  H = undefined,
+  E = unknown
 >(
   url: string,
   optionals: Optionals<D, H> = {}
-): AsyncWebData<T> =>
+): AsyncWebData<T, E> =>
   axios({
     method,
     url,
     data: optionals.data,
     headers: optionals.headers
   })
-    .then((response: AxiosResponse<T>) => Success<string, T>(response.data))
-    .catch((error: AxiosError) =>
-      Failure<string, T>(errorToString(url, method, error))
+    .then((response: AxiosResponse<T>) =>
+      Success<AxiosError<E>, T>(response.data)
     )
+    .catch((error: AxiosError<E>) => Failure<AxiosError<E>, T>(error))
 
 export const get = request("get")
 export const post = request("post")
@@ -61,10 +46,10 @@ export const patch = request("patch")
 export const put = request("put")
 export const del = request("delete")
 
-export const useRemoteData = <T, A>(
-  requestF: (...reqArgs: A[]) => AsyncWebData<T>
-): [WebData<T>, (...reqArgs: A[]) => void] => {
-  const [remoteData, setRemoteData] = useState(NotAsked<string, T>())
+export const useRemoteData = <T, A, E = unknown>(
+  requestF: (...reqArgs: A[]) => AsyncRemoteData<E, T>
+): [RemoteData<E, T>, (...reqArgs: A[]) => void] => {
+  const [remoteData, setRemoteData] = useState(NotAsked<E, T>())
 
   const fetchRemoteData = (...args: A[]) => {
     if (isNotAsked(remoteData)) {
