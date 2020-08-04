@@ -1,6 +1,7 @@
 import { Loading, NotAsked } from "@kakekomu/remote-data"
 import * as remote from "@kakekomu/remote-data"
 import React, { FunctionComponent, useState } from "react"
+import { AxiosError } from "axios"
 
 interface Resp {
   args: {
@@ -9,7 +10,7 @@ interface Resp {
 }
 
 const SimpleTSExample: FunctionComponent = () => {
-  const [webData, setWebData] = useState(NotAsked<string, string>())
+  const [webData, setWebData] = useState(NotAsked<AxiosError, string>())
 
   const fetchGreeting = () => {
     // Setting the webData to Loading before starting the request
