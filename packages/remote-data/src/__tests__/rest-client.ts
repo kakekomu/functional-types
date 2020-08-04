@@ -51,8 +51,6 @@ describe("restClient methods", () => {
 
   test("handling failure", async () => {
     const response = await remote.get("http://localhost:4444/post")
-    const errorMsg = isFailure(response) ? response.error : undefined
     expect(isFailure(response)).toBeTruthy()
-    expect(errorMsg).toMatch("GET http://localhost:4444/post")
   })
 })
