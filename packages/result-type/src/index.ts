@@ -146,6 +146,19 @@ export function sequence<err, T>(
   )
 }
 
+/** Take all the values that are present, throwing away any errors.
+ *
+ *  List (Result err a) -> List a
+ */
+export const values = <err, val>(resultList: Array<Result<err, val>>): val[] =>
+  resultList.reduce((acc, resp) => {
+    if (isOk(resp)) {
+      return [...acc, resp.value]
+    } else {
+      return acc
+    }
+  }, [] as val[])
+
 /** List a -> (a -> Result err a) -> Result err (List a) */
 export const traverse = <err, val, returnVal>(
   valueList: val[],
